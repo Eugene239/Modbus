@@ -6,24 +6,28 @@ import com.ghgande.j2mod.modbus.procimg.Register;
 import com.ghgande.j2mod.modbus.util.BitVector;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import jssc.SerialPortList;
+import ru.epavlov.modbus.Entity.Hreg;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Eugene on 13.02.2017.
  */
-public class ModbusRTU implements ModbusConnection{
+public class ModbusRTU implements ModbusConnection {
     private String port;
     private String encoding = "rtu";
     private int baudRate = 9600;
     private int databits = 8;
     private int stopBits = 1;
-    private int parity=0;
+    private int parity = 0;
     private SerialParameters parameters;
     private ModbusSerialMaster modbus;
+    private HashMap<Integer,Integer> hregMap = new HashMap<>();
+    private HashMap<Integer,Boolean>  coilMap = new HashMap<>();
 
-    public ModbusRTU(String portname){
-        init(portname,encoding,baudRate,databits,stopBits,parity);
+    public ModbusRTU(String portname) {
+        init(portname, encoding, baudRate, databits, stopBits, parity);
     }
 
     public ModbusRTU(String port, String encoding, int baudRate, int databits, int stopBits, int parity) {
@@ -34,7 +38,8 @@ public class ModbusRTU implements ModbusConnection{
         this.stopBits = stopBits;
         this.parity = parity;
     }
-    private void init(String port, String encoding, int baudRate, int databits, int stopBits, int parity){
+
+    private void init(String port, String encoding, int baudRate, int databits, int stopBits, int parity) {
         this.port = port;
         this.encoding = encoding;
         this.baudRate = baudRate;
@@ -48,12 +53,13 @@ public class ModbusRTU implements ModbusConnection{
         parameters.setBaudRate(baudRate);
         parameters.setDatabits(databits);
         parameters.setStopbits(stopBits);
+        parameters.setEncoding(encoding);
         modbus = new ModbusSerialMaster(parameters);
     }
 
     public static void main(String[] args) {
 
-       String portName= SerialPortList.getPortNames()[0];
+        String portName = SerialPortList.getPortNames()[0];
         SerialParameters serialParameters = new SerialParameters();
         serialParameters.setPortName(portName);
         serialParameters.setParity(0);
@@ -66,49 +72,71 @@ public class ModbusRTU implements ModbusConnection{
         ModbusSerialMaster modbusSerialMaster = new ModbusSerialMaster(serialParameters);
         try {
             modbusSerialMaster.connect();
-           while(true) {
-               //BitVector bitVector = modbusSerialMaster.readCoils(0, 10);
-               Register[] register= modbusSerialMaster.readMultipleRegisters(0,40);
-               for (int i = 0; i < 40; i++) {
-                   System.out.print(register[i] + ", ");
-               }
-               System.out.println();
-               Thread.sleep(500);
-           }
+            while (true) {
+                //BitVector bitVector = modbusSerialMaster.readCoils(0, 10);
+                Register[] register = modbusSerialMaster.readMultipleRegisters(0, 40);
+                for (int i = 0; i < 40; i++) {
+                    System.out.print(register[i] + ", ");
+                }
+                System.out.println();
+                Thread.sleep(500);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         //  SerialConnection serialConnection = new SerialConnection(new SerialParameters());
     }
+
     public boolean connect() {
-        try{
-            modbus.setRetries(4);
+        try {
+            //modbus.setRetries(4);
             modbus.connect();
+            System.out.println("ModbusRTU::connected to "+ port);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
     public void disconnect() {
         modbus.disconnect();
     }
 
-    public ArrayList<Boolean> getCoils(int offset, int size) {
+    public void readCoilsList(int offset, int size) {
+      //  ArrayList<Coil> list = new ArrayList<Coil>();
         try {
-            BitVector bitVector = modbus.readCoils(offset,size);
-            for (int i= 0; i <bitVector.size();i++){
-             //   bitVector.g
+            BitVector bitVector = modbus.readCoils(offset, size);
+            for (int i = 0; i < bitVector.size(); i++) {
+                coilMap.put(offset + i, bitVector.getBit(i));
+              //  coilArrayList.add(new Coil(offset + i, bitVector.getBit(i)));
             }
         } catch (ModbusException e) {
             e.printStackTrace();
         }
-        return null;
+       // return list;
     }
 
-    public ArrayList<Integer> getHreg(int offset, int size) {
-        return null;
+    public void readHregList(int offset, int size) {
+        ArrayList<Hreg> list = new ArrayList<>();
+        try {
+            Register[] registers = modbus.readMultipleRegisters(offset, size);
+            for (int i = 0; i < registers.length; i++) {
+                hregMap.put(offset+i,registers[i].getValue());
+            }
+        } catch (ModbusException e) {
+            e.printStackTrace();
+        }
+     //   return list;
     }
 
+    @Override
+    public HashMap<Integer, Integer> getHregMap() {
+        return hregMap;
+    }
 
+    @Override
+    public HashMap<Integer, Boolean> getCoilMap() {
+        return coilMap;
+    }
 }

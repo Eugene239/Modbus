@@ -14,7 +14,7 @@ public class ModbusTCP {
         try{
             modbusTCPMaster.setReconnecting(true);
             modbusTCPMaster.setRetries(4);
-            modbusTCPMaster.connect();
+             modbusTCPMaster.connect();
 
             while (true) {
 

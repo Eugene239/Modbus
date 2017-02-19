@@ -1,6 +1,6 @@
 package ru.epavlov.modbus;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Eugene on 19.02.2017.
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 public interface ModbusConnection {
     public boolean connect();
     public void disconnect();
-    public ArrayList<Boolean> getCoils(int offset, int size);
-    public ArrayList<Integer> getHreg(int offset, int size);
+    public void readCoilsList(int offset, int size);
+    public void readHregList(int offset, int size);
+    public HashMap<Integer,Boolean> getCoilMap();
+    public HashMap<Integer,Integer> getHregMap();
+
 }
