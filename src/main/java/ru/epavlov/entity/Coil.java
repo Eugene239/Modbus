@@ -1,22 +1,14 @@
-package ru.epavlov.modbus.Entity;
+package ru.epavlov.entity;
 
 /**
  * Created by Eugene on 19.02.2017.
  */
 public class Coil {
-    private int id;
     private boolean value;
+    private int id;
 
     public Coil(int id, boolean value) {
-        this.id = id;
         this.value = value;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -24,7 +16,7 @@ public class Coil {
         return value;
     }
 
-    public void setValue(boolean value) {
-        this.value = value;
+    public int getId() {
+        return id;
     }
 }

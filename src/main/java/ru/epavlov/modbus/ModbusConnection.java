@@ -12,5 +12,6 @@ public interface ModbusConnection {
     public void readHregList(int offset, int size);
     public HashMap<Integer,Boolean> getCoilMap();
     public HashMap<Integer,Integer> getHregMap();
+    public boolean isConnected();
 
 }

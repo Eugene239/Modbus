@@ -6,9 +6,7 @@ import com.ghgande.j2mod.modbus.procimg.Register;
 import com.ghgande.j2mod.modbus.util.BitVector;
 import com.ghgande.j2mod.modbus.util.SerialParameters;
 import jssc.SerialPortList;
-import ru.epavlov.modbus.Entity.Hreg;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -25,6 +23,7 @@ public class ModbusRTU implements ModbusConnection {
     private ModbusSerialMaster modbus;
     private HashMap<Integer,Integer> hregMap = new HashMap<>();
     private HashMap<Integer,Boolean>  coilMap = new HashMap<>();
+    private boolean connected=false;
 
     public ModbusRTU(String portname) {
         init(portname, encoding, baudRate, databits, stopBits, parity);
@@ -92,6 +91,7 @@ public class ModbusRTU implements ModbusConnection {
             //modbus.setRetries(4);
             modbus.connect();
             System.out.println("ModbusRTU::connected to "+ port);
+            connected = true;
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,6 +100,7 @@ public class ModbusRTU implements ModbusConnection {
     }
 
     public void disconnect() {
+        connected=false;
         modbus.disconnect();
     }
 
@@ -118,7 +119,7 @@ public class ModbusRTU implements ModbusConnection {
     }
 
     public void readHregList(int offset, int size) {
-        ArrayList<Hreg> list = new ArrayList<>();
+      //  ArrayList<Hreg> list = new ArrayList<>();
         try {
             Register[] registers = modbus.readMultipleRegisters(offset, size);
             for (int i = 0; i < registers.length; i++) {
@@ -131,12 +132,17 @@ public class ModbusRTU implements ModbusConnection {
     }
 
     @Override
-    public HashMap<Integer, Integer> getHregMap() {
-        return hregMap;
+    public HashMap<Integer, Integer> getHregMap() {      return hregMap;
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connected;
     }
 
     @Override
     public HashMap<Integer, Boolean> getCoilMap() {
         return coilMap;
     }
+
 }
