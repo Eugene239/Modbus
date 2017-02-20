@@ -24,7 +24,7 @@ public class ModbusRTU implements ModbusConnection {
     private HashMap<Integer,Integer> hregMap = new HashMap<>();
     private HashMap<Integer,Boolean>  coilMap = new HashMap<>();
     private boolean connected=false;
-
+    private Register register;
     public ModbusRTU(String portname) {
         init(portname, encoding, baudRate, databits, stopBits, parity);
     }
@@ -119,9 +119,11 @@ public class ModbusRTU implements ModbusConnection {
     }
 
     public void readHregList(int offset, int size) {
+
       //  ArrayList<Hreg> list = new ArrayList<>();
         try {
             Register[] registers = modbus.readMultipleRegisters(offset, size);
+            if (register==null) register= registers[0];
             for (int i = 0; i < registers.length; i++) {
                 hregMap.put(offset+i,registers[i].getValue());
             }
@@ -132,7 +134,8 @@ public class ModbusRTU implements ModbusConnection {
     }
 
     @Override
-    public HashMap<Integer, Integer> getHregMap() {      return hregMap;
+    public HashMap<Integer, Integer> getHregMap() {
+        return hregMap;
     }
 
     @Override
@@ -144,5 +147,15 @@ public class ModbusRTU implements ModbusConnection {
     public HashMap<Integer, Boolean> getCoilMap() {
         return coilMap;
     }
+    public void  writeCoil(int id, boolean value) throws ModbusException {
+            modbus.writeCoil(id,value);
+    }
+    public void  writeHreg(int id, int value) throws ModbusException {
+        //Register register = new Register()
+        register.setValue(value);
+        modbus.writeSingleRegister(id,register);
+    }
+
+
 
 }

@@ -1,18 +1,35 @@
-<html>
+<html >
 <head>
     <meta charset="utf-8">
     <title>Вот это сайт</title>
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/functions.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body style="background-color: whitesmoke;">
+<body style="background-color: wheat;" onload="updateCoils()">
 <script>
-    //            $("#field").html("uuu");
-    setInterval(function(){updateCoils();},1000);
+//    $("#rangeId").on('input',function(){
+//       alert(this.value)
+//    });
+    setInterval(function () {
+        update();
+    }, 500);
     // updateCoils();
-</script>
-    <div id="field" style="width: 200px; height: 200px; margin: auto; background-color: mediumorchid">
 
-    </div>
+    function range(ent){
+        //$("#rangeValue").html(ent);
+        console.log(ent);
+        writeRegister(0,ent);
+       // alert(ent)
+    }
+</script>
+<div id="field" style="  margin: auto; background-color: black">
+</div>
+<div id="hreg" style="width: 200px; height: 200px; margin: auto; background-color: white">
+<input id="rangeId" type="range" value="0" max="255" min="0" onchange="range(value)" oninput="$('#rangeValue').html(value);">
+    <span id="rangeValue">0</span>
+</div>
 </body>
 </html>

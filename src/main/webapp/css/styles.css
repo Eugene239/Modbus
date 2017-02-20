@@ -1,0 +1,15 @@
+.coilButton{
+    position: relative;
+    /*display: table;*/
+    width: 70px;
+    background-color: white;
+    margin: auto;
+}
+#custom-handle {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}

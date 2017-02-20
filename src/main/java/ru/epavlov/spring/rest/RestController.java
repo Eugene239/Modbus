@@ -1,13 +1,14 @@
 package ru.epavlov.spring.rest;
 
-
 import jssc.SerialPortList;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.epavlov.entity.Coil;
+import ru.epavlov.entity.Hreg;
 import ru.epavlov.modbus.ModbusRTU;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 
@@ -48,16 +49,63 @@ public class RestController {
         if(!modbusRTU.isConnected()){
             modbusRTU.connect();
         }
+        System.out.println("/coils");
         ArrayList<Coil> list = new ArrayList<>();
         modbusRTU.readCoilsList(Integer.parseInt(offset),Integer.parseInt(size));
         modbusRTU.getCoilMap().forEach((i,b)->{
             list.add(new Coil(i,b));
-            System.out.print(i+";"+b+" ");
+       //     System.out.print(i+";"+b+" ");
         });
        // modbusRTU.getCoilMap().e
-        System.out.println();
-        System.out.println(getClientIpAddress(request));
+     //   System.out.println();
+      //  System.out.println(getClientIpAddress(request));
         return list;
+    }
+    @PostMapping("/hregs")
+    public ArrayList<Hreg> getHregs(@RequestParam(value = "offset",defaultValue = "0") String offset,
+                                    @RequestParam(value = "size",defaultValue = "0") String size, HttpServletRequest request){
+
+        if(!modbusRTU.isConnected()){
+            modbusRTU.connect();
+        }
+        System.out.println("/hregs::    offset:"+offset+"   size:"+size);
+        ArrayList<Hreg> list = new ArrayList<>();
+        modbusRTU.readHregList(Integer.parseInt(offset),Integer.parseInt(size));
+        modbusRTU.getHregMap().forEach((i,i1)->{
+            list.add(new Hreg(i,i1));
+            //     System.out.print(i+";"+b+" ");
+        });
+        return list;
+    }
+    @PostMapping("/setCoil")
+    public Response setCoil(
+            @RequestParam(value = "id") String id,
+            @RequestParam(value = "value") String value){
+        System.out.println("/setCoil::"+id+":"+value);
+        try{
+            int _id= Integer.parseInt(id);
+            boolean _value = Boolean.parseBoolean(value);
+            modbusRTU.writeCoil(_id,_value);
+            return Response.status(200).build();
+        }catch (Exception e){
+            return Response.status(400).build();
+        }
+    }
+    @PostMapping("/setHreg")
+    public Response setHreg(@RequestParam(value = "id") String id,
+                            @RequestParam(value = "value") String value){
+
+
+        try{
+            int _id= Integer.parseInt(id);
+            int _value = Integer.parseInt(value);
+            System.out.println("/setHreg::"+id+":"+value);
+            modbusRTU.writeHreg(_id,_value);
+            return Response.status(200).build();
+        }catch (Exception e){
+            System.err.println(e.toString());
+            return Response.status(400).build();
+        }
     }
     private  String getClientIpAddress(HttpServletRequest request) {
         for (String header : IP_HEADER_CANDIDATES) {
