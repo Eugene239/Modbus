@@ -1,17 +1,22 @@
 package ru.epavlov.modbus;
 
+import com.ghgande.j2mod.modbus.ModbusException;
+
 import java.util.HashMap;
 
 /**
  * Created by Eugene on 19.02.2017.
  */
 public interface ModbusConnection {
-    public boolean connect();
-    public void disconnect();
-    public void readCoilsList(int offset, int size);
-    public void readHregList(int offset, int size);
-    public HashMap<Integer,Boolean> getCoilMap();
-    public HashMap<Integer,Integer> getHregMap();
-    public boolean isConnected();
+     boolean connectOld();
+     void connect(ConnectionParameters connection) throws ModbusException;
+     void disconnect();
+     void readCoilsList(int offset, int size);
+     void readHregList(int offset, int size);
+     HashMap<Integer,Boolean> getCoilMap();
+     HashMap<Integer,Integer> getHregMap();
+     boolean isConnected();
+     void writeCoil(int id, boolean value) throws ModbusException;
+     void writeHreg(int id, int value) throws  ModbusException;
 
 }

@@ -83,10 +83,10 @@ public class ModbusRTU implements ModbusConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //  SerialConnection serialConnection = new SerialConnection(new SerialParameters());
+        //  ConnectionParameters serialConnection = new ConnectionParameters(new SerialParameters());
     }
 
-    public boolean connect() {
+    public boolean connectOld() {
         try {
             //modbus.setRetries(4);
             modbus.connect();
@@ -97,6 +97,11 @@ public class ModbusRTU implements ModbusConnection {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public void connect(ConnectionParameters connection) throws ModbusException {
+
     }
 
     public void disconnect() {
