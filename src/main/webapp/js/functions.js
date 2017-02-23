@@ -1,6 +1,7 @@
+
 function updateCoils(){
     $.ajax({
-        url: "http://188.134.74.148/coils",
+        url: "/coils",
         type: "POST",
         data: {'offset':'0', 'size':'40'},
         success:
@@ -20,7 +21,7 @@ function updateCoils(){
                     b.setAttribute("coilId",resp[i].id);
                     b.setAttribute("value",resp[i].value);
                     b.innerHTML=resp[i].id+" "+resp[i].value;
-                    b.onclick= function(){writeCoil(this.getAttribute("coilId"),this.getAttribute("value"))};
+                    b.onclick= function(){writeCoil(this.getAttribute("coilId"),this.getAttribute("value")); update();};
                     div.appendChild(b);
                 }
                 $("#field").append(div);
@@ -34,7 +35,7 @@ function writeCoil(id, value){
    // alert(!value);
     console.log(id+" "+!JSON.parse(value));
     $.ajax({
-        url: "http://188.134.74.148/setCoil",
+        url: "/setCoil",
         type: "POST",
         data: {'id': id, 'value': !JSON.parse(value)}
     });
@@ -44,7 +45,7 @@ function writeRegister(id, value){
     // alert(!value);
     console.log(id+" "+value);
     $.ajax({
-        url: "http://188.134.74.148/setHreg",
+        url: "/setHreg",
         type: "POST",
         data: {'id': id, 'value': value}
     });
@@ -52,7 +53,7 @@ function writeRegister(id, value){
 }
 function updateHregs(){
     $.ajax({
-        url: "http://188.134.74.148/hregs",
+        url: "/hregs",
         type: "POST",
         data: {'offset':'0', 'size':'5'},
         success:
@@ -75,6 +76,33 @@ function updateHregs(){
         error: function(data){
 
         },
+    });
+}
+function getPorts(){
+    $.ajax({
+        url: "/port",
+        type: "POST",
+        data:{'reg':"list"},
+        success: function (resp) {
+            for(i = 0;i<resp.entity.length;i++){
+                $("#port").append("<option>"+ resp.entity[i]+"</option>")
+            }
+            //console.log(resp.entity.length);
+        }
+    });
+}
+function connect(){
+    $.ajax({
+        url: "/port",
+        type: "POST",
+        data:{'reg':"list"},
+        success: function (resp) {
+            $("#port").empty();
+            for(i = 0;i<resp.entity.length;i++){
+                $("#port").append("<option>"+ resp.entity[i]+"</option>")
+            }
+            //console.log(resp.entity.length);
+        }
     });
 }
 function update(){

@@ -13,3 +13,70 @@
     text-align: center;
     line-height: 1.6em;
 }
+body,html{
+
+}
+#main{
+    background-color: gray;
+    margin: 50px auto auto;
+    height: 90%;
+    /*border: 4px solid;*/
+    /*border-color: dimgrey;*/
+    box-shadow: 8px 8px 5px #505050;
+    /*border-radius: 10px;*/
+    width: 800px;
+}
+#menu{
+    /*display: inline-block;*/
+    width:200px;
+    /*border: 2px 0px 0px 0px solid;*/
+    /*padding-bottom: 2px;*/
+    border-left: 2px solid #505050;
+    border-bottom: 2px solid #505050;
+    border-top: 2px solid #505050;
+    margin-left: -10px;
+    float:left;
+    /*padding-bottom: 20px;*/
+    /*padding-bottom: -10px;*/
+    /*padding: -4px;*/
+    /*border-color: dimgrey;*/
+    /*margin-bottom: 40px;*/
+    border-radius: 8px 0px 0px 8px;
+    height: 99.7% ;
+    background-color: #fafafa;
+}
+#headerMenu{
+    margin: auto;
+}
+#modbusImage{
+    width:80%;
+    height: inherit;
+    margin: auto;
+    display: block;
+    padding-bottom:20px;
+}
+.menuColumn{
+    width: 100%;
+    height: 40px;
+    display: table;
+
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+}
+.menuColumnText{
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+#fieldMain{
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    /*margin-top: 20px;*/
+    /*margin-left: 2px;*/
+    right: 0px;
+    /*display: inline-block;*/
+}

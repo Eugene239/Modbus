@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.epavlov.entity.Coil;
 import ru.epavlov.entity.Hreg;
 import ru.epavlov.modbus.ModbusRTU;
+import ru.epavlov.modbus.SerialConnection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
+    private SerialConnection connection= new SerialConnection();
+    private String port = "COM8";
     private static final String[] IP_HEADER_CANDIDATES = {
             "X-Forwarded-For",
             "Proxy-Client-IP",
@@ -115,5 +118,41 @@ public class RestController {
             }
         }
         return request.getRemoteAddr();
+    }
+    @PostMapping("/port")
+    private Response port(@RequestParam(value = "reg") String reg){
+        if (reg.equals("list")) return Response.status(Response.Status.OK).entity(SerialPortList.getPortNames()).build();
+        if  (reg.equals("connection")) return Response.status(Response.Status.OK).entity(port).build();
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    @PostMapping("/connection")
+    private Response connection(
+                                @RequestParam(value = "type")String type,
+                                @RequestParam(value = "action")String action,
+                                @RequestParam(value = "portName")String portName,
+                                @RequestParam(value = "baudRate",defaultValue = "9600")String baudRate,
+                                @RequestParam(value = "echo",defaultValue = "false")boolean echo,
+                                @RequestParam(value = "parity", defaultValue = "0")String parity,
+                                @RequestParam(value = "dataBits",defaultValue = "8")String dataBits,
+                                @RequestParam(value = "stopBits",defaultValue = "1")String stopBits){
+
+        try {
+            if (type.equals("RTU")) {
+                    if (action.equals("create")){
+
+                    }
+                    if(action.equals("get")){
+                        //возвращаем подключение
+                        return Response.ok().entity(connection).build();
+                    }
+            }
+            if (type.equals("TCP")) {
+
+            }
+        }catch (Exception e){
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+
     }
 }
