@@ -78,34 +78,4 @@ function updateHregs(){
         },
     });
 }
-function getPorts(){
-    $.ajax({
-        url: "/port",
-        type: "POST",
-        data:{'reg':"list"},
-        success: function (resp) {
-            for(i = 0;i<resp.entity.length;i++){
-                $("#port").append("<option>"+ resp.entity[i]+"</option>")
-            }
-            //console.log(resp.entity.length);
-        }
-    });
-}
-function connect(){
-    $.ajax({
-        url: "/port",
-        type: "POST",
-        data:{'reg':"list"},
-        success: function (resp) {
-            $("#port").empty();
-            for(i = 0;i<resp.entity.length;i++){
-                $("#port").append("<option>"+ resp.entity[i]+"</option>")
-            }
-            //console.log(resp.entity.length);
-        }
-    });
-}
-function update(){
-    updateCoils();
-    updateHregs();
-}
+

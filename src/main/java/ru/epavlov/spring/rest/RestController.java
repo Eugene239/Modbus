@@ -1,6 +1,5 @@
 package ru.epavlov.spring.rest;
 
-import com.ghgande.j2mod.modbus.ModbusException;
 import jssc.SerialPortList;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,6 +7,7 @@ import ru.epavlov.entity.Coil;
 import ru.epavlov.entity.Hreg;
 import ru.epavlov.modbus.ConnectionParameters;
 import ru.epavlov.modbus.ModbusConnection;
+import ru.epavlov.modbus.ModbusRTU;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
@@ -33,7 +33,7 @@ public class RestController {
             "REMOTE_ADDR" };
 
 
-    private ModbusConnection modbus;
+    private ModbusConnection modbus = new ModbusRTU("");
 
 
     @PostMapping("/coils")
@@ -116,11 +116,7 @@ public class RestController {
     @PostMapping("/connect")
     private Response connect(@RequestParam(value = "action", defaultValue = "status") String action){
         if (action.equals("status")){
-           if (modbus.isConnected()){
-               return Response.ok().entity(connectionParameters).build();
-           }else {
-               return Response.ok().entity(false).build();
-           }
+            return  Response.ok().entity(modbus.isConnected()).build();
         }
         if (action.equals("disconnect")){
             if (modbus.isConnected()) modbus.disconnect();
@@ -131,7 +127,7 @@ public class RestController {
                 if(modbus.isConnected()) modbus.disconnect();
                 modbus.connect(connectionParameters);
                 return Response.ok().entity(connectionParameters).build();
-            }catch (ModbusException e){
+            }catch (Exception e){
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.toString()).build();
             }
         }
@@ -142,12 +138,12 @@ public class RestController {
     private Response parameters(
                                 @RequestParam(value = "type")String type,
                                 @RequestParam(value = "action")String action,
-                                @RequestParam(value = "portName",defaultValue = "")String portName,
-                                @RequestParam(value = "baudRate",defaultValue = "9600")String baudRate,
+                                @RequestParam(value = "portName",defaultValue = "COM8")String portName,
+                                @RequestParam(value = "baudRate",defaultValue = "9600")int baudRate,
                                 @RequestParam(value = "echo",defaultValue = "false")boolean echo,
-                                @RequestParam(value = "parity", defaultValue = "0")String parity,
-                                @RequestParam(value = "dataBits",defaultValue = "8")String dataBits,
-                                @RequestParam(value = "stopBits",defaultValue = "1")String stopBits,
+                                @RequestParam(value = "parity", defaultValue = "0")int parity,
+                                @RequestParam(value = "dataBits",defaultValue = "8")int dataBits,
+                                @RequestParam(value = "stopBits",defaultValue = "1")int stopBits,
                                 @RequestParam(value = "ipPort",defaultValue = "502")String ipPort,
                                 @RequestParam(value = "ip",defaultValue = "")String ip
                                 ){
@@ -155,7 +151,8 @@ public class RestController {
         try {
             if (type.equals("RTU")) {
                     if (action.equals("create")){
-
+                        connectionParameters = new ConnectionParameters(portName,baudRate,dataBits,stopBits,parity,echo);
+                        return Response.ok().entity(connectionParameters).build();
                     }
                     if(action.equals("get")){
                         //возвращаем подключение

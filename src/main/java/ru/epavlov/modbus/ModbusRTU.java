@@ -100,8 +100,17 @@ public class ModbusRTU implements ModbusConnection {
     }
 
     @Override
-    public void connect(ConnectionParameters connection) throws ModbusException {
-
+    public void connect(ConnectionParameters connection) throws Exception {
+        parameters.setPortName(connection.getSerialPort());
+        parameters.setDatabits(connection.getDatabits());
+        parameters.setParity(connection.getParity());
+        parameters.setEncoding("rtu");
+        parameters.setStopbits(connection.getStopBits());
+        parameters.setEcho(false);
+        parameters.setBaudRate(connection.getBaudRate());
+        if (connected) modbus.disconnect();
+        modbus = new ModbusSerialMaster(parameters);
+        modbus.connect();
     }
 
     public void disconnect() {
@@ -111,6 +120,7 @@ public class ModbusRTU implements ModbusConnection {
 
     public void readCoilsList(int offset, int size) {
       //  ArrayList<Coil> list = new ArrayList<Coil>();
+
         try {
             BitVector bitVector = modbus.readCoils(offset, size);
             for (int i = 0; i < bitVector.size(); i++) {
