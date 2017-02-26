@@ -8,8 +8,8 @@ import java.util.HashMap;
  * Created by Eugene on 19.02.2017.
  */
 public interface ModbusConnection {
-     boolean connectOld();
-     void connect(ConnectionParameters connection) throws ModbusException;
+   //  boolean connectOld();
+     void connect(ConnectionParameters connection) throws Exception;
      void disconnect();
      void readCoilsList(int offset, int size);
      void readHregList(int offset, int size);

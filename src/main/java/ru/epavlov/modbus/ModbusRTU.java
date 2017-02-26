@@ -85,19 +85,19 @@ public class ModbusRTU implements ModbusConnection {
         }
         //  ConnectionParameters serialConnection = new ConnectionParameters(new SerialParameters());
     }
-
-    public boolean connectOld() {
-        try {
-            //modbus.setRetries(4);
-            modbus.connect();
-            System.out.println("ModbusRTU::connected to "+ port);
-            connected = true;
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//
+//    public boolean connectOld() {
+//        try {
+//            //modbus.setRetries(4);
+//            modbus.connect();
+//            System.out.println("ModbusRTU::connected to "+ port);
+//            connected = true;
+//            return true;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     @Override
     public void connect(ConnectionParameters connection) throws Exception {
@@ -111,6 +111,7 @@ public class ModbusRTU implements ModbusConnection {
         if (connected) modbus.disconnect();
         modbus = new ModbusSerialMaster(parameters);
         modbus.connect();
+        connected = true;
     }
 
     public void disconnect() {

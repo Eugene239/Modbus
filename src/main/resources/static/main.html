@@ -4,6 +4,8 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/functions.js"></script>
+    <script src="js/connection.js"></script>
+    <script src="js/modbus.js"></script>
 </head>
 
 <body style="background-image: url(images/back3.png); background-size: cover" onload="getPorts()">
@@ -25,7 +27,7 @@
         <select id="port">
 
         </select>
-        <button onclick="isConnect()">connect</button>
+        <button onclick="mainOnclick()">connect</button>
     </div>
 </div>
 </body>

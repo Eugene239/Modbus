@@ -40,32 +40,36 @@ public class RestController {
     public ArrayList<Coil> getCoils(
             @RequestParam(value = "offset",defaultValue = "0") String offset,
             @RequestParam(value = "size",defaultValue = "0") String size, HttpServletRequest request) {
-
-        if(!modbus.isConnected()){
-            modbus.connectOld();
-        }
-        System.out.println("/coils");
         ArrayList<Coil> list = new ArrayList<>();
+        System.out.println("/coils");
+        if(modbus.isConnected()){
+
         modbus.readCoilsList(Integer.parseInt(offset),Integer.parseInt(size));
         modbus.getCoilMap().forEach((i, b)->{
             list.add(new Coil(i,b));
         });
+
+        }
         return list;
     }
     @PostMapping("/hregs")
     public ArrayList<Hreg> getHregs(@RequestParam(value = "offset",defaultValue = "0") String offset,
                                     @RequestParam(value = "size",defaultValue = "0") String size, HttpServletRequest request){
 
-        if(!modbus.isConnected()){
-            modbus.connectOld();
-        }
-        System.out.println("/hregs::    offset:"+offset+"   size:"+size);
+//        if(!modbus.isConnected()){
+//            modbus.connectOld();
+//        }
         ArrayList<Hreg> list = new ArrayList<>();
-        modbus.readHregList(Integer.parseInt(offset),Integer.parseInt(size));
-        modbus.getHregMap().forEach((i, i1)->{
-            list.add(new Hreg(i,i1));
-        });
+        if (modbus.isConnected()) {
+            System.out.println("/hregs::    offset:" + offset + "   size:" + size);
+
+            modbus.readHregList(Integer.parseInt(offset), Integer.parseInt(size));
+            modbus.getHregMap().forEach((i, i1) -> {
+                list.add(new Hreg(i, i1));
+            });
+        }
         return list;
+
     }
     @PostMapping("/setCoil")
     public Response setCoil(
