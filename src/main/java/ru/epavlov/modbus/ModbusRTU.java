@@ -117,6 +117,7 @@ public class ModbusRTU implements ModbusConnection {
     public void disconnect() {
         connected=false;
         modbus.disconnect();
+
     }
 
     public void readCoilsList(int offset, int size) {

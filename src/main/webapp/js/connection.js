@@ -5,14 +5,9 @@ function isConnect(){
         type: "POST",
         data:{'action':"status"},
         success: function (resp) {
-            if (!JSON.parse(resp.entity)){
-                connected = false;
-              //  parameters("RTU","create");
-            }
-            else {
-                connected = true;
-            }
-            console.log(resp.entity);
+            if (!JSON.parse(resp.entity)) connected = false;
+            else connected = true;
+           // console.log(resp.entity);
         }
     });
 }
@@ -26,11 +21,7 @@ function parameters(type , action, portName){
             if (action=='create' && resp.status==200){
                 connectToMOdbus("connect");
             }
-            //$("#port").empty();
-            //for(i = 0;i<resp.entity.length;i++){
-            //    $("#port").append("<option>"+ resp.entity[i]+"</option>")
-            //}
-            //console.log(resp.entity.length);
+
         }
     });
 }
@@ -51,9 +42,14 @@ function connectToMOdbus(action){
         }
     });
 }
-function mainOnclick(){
+function mainConnect(){
     console.log( $("#port :selected").text());
-  parameters("RTU","create", $("#port :selected").text());
+    parameters("RTU","create", $("#port :selected").text());
+}
+function mainDisconnect(){
+    disconnect();
+    connected = false;
+
 }
 
 function getPorts(){
@@ -64,9 +60,29 @@ function getPorts(){
         success: function (resp) {
             for(i = 0;i<resp.entity.length;i++){
                 $("#port").append("<option>"+ resp.entity[i]+"</option>");
-                console.log(resp.entity);
+              //  console.log(resp.entity);
             }
-            //console.log(resp.entity.length);
         }
     });
 }
+function disconnect(){
+    $.ajax({
+        url: "/connect",
+        type: "POST",
+        data:{'action':'disconnect'},
+        success: function (resp) {
+           // console.log(action+"--->"+resp.status);
+            if (action=='connect' && resp.status==200){
+                connected = false;
+            }
+        }
+    });
+}
+function update() {
+    if (window.connected) {
+       // console.log(connected);
+        updateCoils();
+        updateHregs();
+    }
+}
+

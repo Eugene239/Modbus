@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>Подключение</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/connection.js"></script>
+    <script src="js/modbus.js"></script>
+</head>
+
+<body onload="getPorts()">
+
+<div id="main">
+    <div id="menu">
+        <div id="headerMenu">
+            <img id="modbusImage" src="images/modbus.png">
+        </div>
+        <div  class="menuColumn">
+            <span class="menuColumnText" style="background: grey" >Подключение </span>
+        </div>
+        <div  class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='index.html'">Ячейки </span>
+        </div>
+        <div  class="menuColumn">
+            <span class="menuColumnText">Библиотеки </span>
+        </div>
+        <div  class="menuColumn">
+            <span class="menuColumnText">Настройка </span>
+        </div>
+
+    </div>
+    <div id="fieldMain">
+        <div style="margin-top: 20px; margin-left: 20px;">
+        <select>
+            <option>RTU</option>
+            <option>TCP</option>
+        </select>
+        <select id="port">
+
+        </select>
+        <button onclick="mainConnect()">connect</button>
+        <button onclick="mainDisconnect()">disconnect</button>
+            </div>
+    </div>
+</div>
+</body>
+</html>

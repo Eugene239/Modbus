@@ -124,12 +124,14 @@ public class RestController {
         }
         if (action.equals("disconnect")){
             if (modbus.isConnected()) modbus.disconnect();
+            System.out.println("[DISCONNECTED]");
             return Response.ok().build();
         }
         if (action.equals("connect")){
             try {
                 if(modbus.isConnected()) modbus.disconnect();
                 modbus.connect(connectionParameters);
+                System.out.println("[CONNECTED TO "+connectionParameters.getSerialPort()+"]");
                 return Response.ok().entity(connectionParameters).build();
             }catch (Exception e){
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.toString()).build();

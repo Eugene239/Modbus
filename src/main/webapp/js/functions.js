@@ -10,7 +10,7 @@ function updateCoils(){
                 $("#field").empty();
                 var div = document.createElement("DIV");
                 for (i=0; i<resp.length;i++){
-                    if (i%10==0){
+                    if (i%8==0){
                        // console.log(i);
                         var div = document.createElement("DIV");
                         $("#field").append(div);
@@ -21,25 +21,28 @@ function updateCoils(){
                     b.setAttribute("coilId",resp[i].id);
                     b.setAttribute("value",resp[i].value);
                     b.innerHTML=resp[i].id+" "+resp[i].value;
-                    b.onclick= function(){writeCoil(this.getAttribute("coilId"),this.getAttribute("value")); update();};
+                    b.onclick= function(){writeCoil(this.getAttribute("coilId"),this.getAttribute("value")); updateCoils();};
                     div.appendChild(b);
                 }
                 $("#field").append(div);
             },
         error: function(data){
-
+            console.log(data);
+            connected=false;
         },
     });
 }
 function writeCoil(id, value){
    // alert(!value);
-    console.log(id+" "+!JSON.parse(value));
-    $.ajax({
-        url: "/setCoil",
-        type: "POST",
-        data: {'id': id, 'value': !JSON.parse(value)}
-    });
-    update();
+    if (connected) {
+        console.log(id + " " + !JSON.parse(value));
+        $.ajax({
+            url: "/setCoil",
+            type: "POST",
+            data: {'id': id, 'value': !JSON.parse(value)}
+        });
+        //update();
+    }
 }
 function writeRegister(id, value){
     // alert(!value);
@@ -49,7 +52,7 @@ function writeRegister(id, value){
         type: "POST",
         data: {'id': id, 'value': value}
     });
-    update();
+   // update();
 }
 function updateHregs(){
     $.ajax({
@@ -71,7 +74,7 @@ function updateHregs(){
                     $("#hreg").append(range);
                     $("#hreg").append(rangeVal);
                 }
-                console.log(resp.length);
+               // console.log(resp.length);
             },
         error: function(data){
 
