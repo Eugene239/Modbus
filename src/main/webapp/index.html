@@ -26,6 +26,7 @@
         <div id="headerMenu">
             <img id="modbusImage" src="images/modbus.png">
         </div>
+
         <div  class="menuColumn">
             <span class="menuColumnText" onclick="window.location='main.html'">Подключение </span>
         </div>
@@ -38,11 +39,18 @@
         <div  class="menuColumn">
             <span class="menuColumnText">Настройка </span>
         </div>
-
+        <div  class="menuColumn" style="bottom: 0px; position: absolute">Статус: Подключен</div>
     </div>
     <div id="fieldMain">
         <div id="field" style="  margin-left: 20px; background-color: black">
+            <div class="headerField" style="margin-top: 10px">Coils  <div style="float: right; margin-right: 10px">От <input type="number" class="input_value" value="0"> До <input type="number" class="input_value" value="100"></div> </div>
+            <div id="coils" class="coilField">
+                <button class="coilButton On">111</button>
+                <button class="coilButton Off">199</button>
+            </div>
+            <div class="headerField">Holding  <div style="float: right; margin-right: 10px">От <input type="number" class="input_value" value="0"> До <input type="number" class="input_value" value="100"></div></div>
         </div>
+
         <div id="hreg" style="width: 200px; height: 200px; margin: auto; background-color: white">
             <input id="rangeId" type="range" value="0" max="255" min="0" onchange="range(value)" oninput="$('#rangeValue').html(value);">
             <span id="rangeValue">0</span>

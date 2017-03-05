@@ -1,9 +1,16 @@
 .coilButton{
     position: relative;
     /*display: table;*/
-    width: 70px;
+    width: 49px;
+    height: 35px;
     background-color: white;
-    margin: auto;
+    margin: 1px;
+    border: 2px solid black;
+    padding: 2px;
+}
+.coilButton:hover{
+    color: white;
+    cursor: pointer;
 }
 #custom-handle {
     width: 3em;
@@ -13,13 +20,19 @@
     text-align: center;
     line-height: 1.6em;
 }
+.On{
+    background: green;
+}
+.Off{
+    background: red;
+}
 body{
     background-image: url(/images/bg_fill.png);
     background-repeat: repeat;
     /*background-size: repeat;*/
 }
 #main{
-    background-color: gray;
+    background-color: black;
     margin: 50px auto auto;
     height: 90%;
     /*border: 4px solid;*/
@@ -30,14 +43,17 @@ body{
 }
 #menu{
     /*display: inline-block;*/
-    width:200px;
+    /*width:200px;*/
     /*border: 2px 0px 0px 0px solid;*/
     /*padding-bottom: 2px;*/
+    position: relative;
     border-left: 2px solid #000;
     border-bottom: 2px solid #000;
     border-top: 2px solid #000;
     margin-left: -10px;
     float:left;
+    width: 25%;
+    display: inline-block;
     /*padding-bottom: 20px;*/
     /*padding-bottom: -10px;*/
     /*padding: -4px;*/
@@ -61,7 +77,6 @@ body{
     width: 100%;
     height: 40px;
     display: table;
-
     margin: auto;
     text-align: center;
     vertical-align: middle;
@@ -84,10 +99,35 @@ body{
 }
 #fieldMain{
     background-color: white;
-    width: 100%;
-    height: 100%;
-    /*margin-top: 20px;*/
+    height: 99.7%;
+    width: 75.8%;
+    float: right;
+   margin-top: 2px;
+    /*margin-bottom: 14px;*/
     /*margin-left: 2px;*/
-    right: 0px;
+
     /*display: inline-block;*/
+}
+.headerField{
+    background-color: white;
+    color: black;
+    padding: 5px;
+    padding-left: 10px;
+    border: 2px solid black;
+    padding-right: 10px;
+    margin-right: 10px;
+    margin-left: 0px;
+    width: 90%;
+}
+.input_value{
+    width: 50px;
+    margin-right: 10px;
+    text-align: center;
+}
+.coilField{
+    height: 40%;
+   overflow-y: scroll;
+    padding-top: 20px;
+    padding-left: 10px;
+    background-color: white;
 }

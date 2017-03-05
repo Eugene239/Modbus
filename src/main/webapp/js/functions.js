@@ -3,28 +3,26 @@ function updateCoils(){
     $.ajax({
         url: "/coils",
         type: "POST",
-        data: {'offset':'0', 'size':'40'},
+        data: {'offset':'0', 'size':'120'},
         success:
             function(resp){
                 var s="";
-                $("#field").empty();
-                var div = document.createElement("DIV");
+                $("#coils").empty();
+               // var div = document.createElement("DIV");
                 for (i=0; i<resp.length;i++){
-                    if (i%8==0){
-                       // console.log(i);
-                        var div = document.createElement("DIV");
-                        $("#field").append(div);
-                    }
                     var b = document.createElement("BUTTON");
                     b.setAttribute("id","coil"+resp[i].id);
-                    b.setAttribute("class","coilButton");
+
                     b.setAttribute("coilId",resp[i].id);
                     b.setAttribute("value",resp[i].value);
-                    b.innerHTML=resp[i].id+" "+resp[i].value;
+                    if (resp[i].value) b.setAttribute("class","coilButton On");
+                    else b.setAttribute("class","coilButton Off");
+                    b.innerHTML=resp[i].id;
                     b.onclick= function(){writeCoil(this.getAttribute("coilId"),this.getAttribute("value")); updateCoils();};
-                    div.appendChild(b);
+                  // div.appendChild(b);
+                    $("#coils").append(b);
                 }
-                $("#field").append(div);
+
             },
         error: function(data){
             console.log(data);
