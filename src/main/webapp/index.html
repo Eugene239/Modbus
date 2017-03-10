@@ -1,4 +1,4 @@
-<html >
+<html>
 <head>
     <meta charset="utf-8">
     <title>Ячейки</title>
@@ -8,18 +8,16 @@
     <script src="js/modbus.js"></script>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body  onload="isConnect()">
+<body onload="isConnect()">
 <script>
-//    $("#rangeId").on('input',function(){
-//       alert(this.value)
-//    });
-    setInterval(function(){update();}, 500);
-    // updateCoils();
+    setInterval(
+            function () {
+                x = $("#above").val();
+                y = $("#below").val();
+                isConnect();
+                if (connected && y <= 500) updateCoils(x, y);
+            }, 500);
 
-    function range(ent){
-      //  console.log(ent);
-      //  writeRegister(0,ent);
-    }
 </script>
 <div id="main">
     <div id="menu">
@@ -27,33 +25,31 @@
             <img id="modbusImage" src="images/modbus.png">
         </div>
 
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText" onclick="window.location='main.html'">Подключение </span>
         </div>
-        <div  class="menuColumn">
-            <span class="menuColumnText" style="background: grey" onclick="window.location='index.html'">Ячейки </span>
+        <div class="menuColumn">
+            <span class="menuColumnText" style="background: grey" onclick="window.location='index.html'">Coils </span>
         </div>
-        <div  class="menuColumn">
-            <span class="menuColumnText">Библиотеки </span>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='hreg.html'">Hregs</span>
         </div>
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText">Настройка </span>
         </div>
-        <div  class="menuColumn" style="bottom: 0px; position: absolute">Статус: Подключен</div>
+        <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Неизвестно</span>
+        </div>
     </div>
     <div id="fieldMain">
-        <div id="field" style="  margin-left: 20px; background-color: black">
-            <div class="headerField" style="margin-top: 10px">Coils  <div style="float: right; margin-right: 10px">От <input type="number" class="input_value" value="0"> До <input type="number" class="input_value" value="100"></div> </div>
-            <div id="coils" class="coilField">
-                <button class="coilButton On">111</button>
-                <button class="coilButton Off">199</button>
+        <div id="field" >
+            <div class="headerField" style="margin-top: 10px">Coils
+                <div style="float: right; margin-right: 10px">От <input id="above" type="number" class="input_value"
+                                                                        value="0"> До
+                    <input id="below" type="number" class="input_value" value="100"></div>
             </div>
-            <div class="headerField">Holding  <div style="float: right; margin-right: 10px">От <input type="number" class="input_value" value="0"> До <input type="number" class="input_value" value="100"></div></div>
-        </div>
+            <div id="coils" class="coilField">
 
-        <div id="hreg" style="width: 200px; height: 200px; margin: auto; background-color: white">
-            <input id="rangeId" type="range" value="0" max="255" min="0" onchange="range(value)" oninput="$('#rangeValue').html(value);">
-            <span id="rangeValue">0</span>
+            </div>
         </div>
     </div>
 </div>

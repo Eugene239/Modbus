@@ -1,6 +1,7 @@
 .coilButton{
     position: relative;
     /*display: table;*/
+    display: inline-block;
     width: 49px;
     height: 35px;
     background-color: white;
@@ -24,7 +25,7 @@
     background: green;
 }
 .Off{
-    background: red;
+    background: rgb(255,105,98);
 }
 body{
     background-image: url(/images/bg_fill.png);
@@ -71,6 +72,7 @@ body{
     height: inherit;
     margin: auto;
     display: block;
+    margin-top: 2px;
     padding-bottom:20px;
 }
 .menuColumn{
@@ -108,16 +110,25 @@ body{
 
     /*display: inline-block;*/
 }
+#field{
+    position: relative;
+  height: inherit;
+    padding-bottom: 10px;
+    display: flex;
+}
 .headerField{
-    background-color: white;
+    background-color: whitesmoke;
+    position: absolute;
+    display: inline-block;
     color: black;
     padding: 5px;
     padding-left: 10px;
     border: 2px solid black;
     padding-right: 10px;
     margin-right: 10px;
-    margin-left: 0px;
-    width: 90%;
+
+    margin-left: 10px;
+    width: 91%;
 }
 .input_value{
     width: 50px;
@@ -125,9 +136,44 @@ body{
     text-align: center;
 }
 .coilField{
-    height: 40%;
-   overflow-y: scroll;
-    padding-top: 20px;
+    align-items: stretch;
+    position: relative;
+    width: 100%;
+    /*position: absolute;*/
+    overflow-y: scroll;
+    /*display: inline-table;*/;
+    margin-top: 45px;
+    /*padding-top: 5px;*/
     padding-left: 10px;
-    background-color: white;
+    margin-left: 25px;
+}
+.connectionRow{
+    padding: 3px;
+    background: linear-gradient(to right, #fff,#fff,#fff, #000);
+    margin: 2px;
+}
+.param{
+    margin-left: 10px;
+    display: inline-block;
+    text-align: left;
+    width:30%;
+}
+select{
+    width: 25%;
+    background-color: transparent;
+    color: black;
+}
+#parameters{
+    /*margin-right: 10px;*/
+    padding: 1px;
+    background-color: black;
+    border-color: transparent;
+}
+.inputParam{
+    width: 25%;
+    background-color: transparent;
+    color: black;
+    padding-left: 3px;
+    text-align: left;
+    border: 1px solid rgb(169,169,169);
 }

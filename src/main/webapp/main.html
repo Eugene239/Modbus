@@ -9,39 +9,68 @@
     <script src="js/modbus.js"></script>
 </head>
 
-<body onload="getPorts()">
+<body onload="mainInit()">
 
 <div id="main">
     <div id="menu">
         <div id="headerMenu">
             <img id="modbusImage" src="images/modbus.png">
         </div>
-        <div  class="menuColumn">
-            <span class="menuColumnText" style="background: grey" >Подключение </span>
+
+        <div class="menuColumn">
+            <span class="menuColumnText" style="background: grey"
+                  onclick="window.location='main.html'">Подключение </span>
         </div>
-        <div  class="menuColumn">
-            <span class="menuColumnText" onclick="window.location='index.html'">Ячейки </span>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='index.html'">Coils </span>
         </div>
-        <div  class="menuColumn">
-            <span class="menuColumnText">Библиотеки </span>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='hreg.html'">Hregs</span>
         </div>
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText">Настройка </span>
         </div>
-
+        <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Не подключен</span>
+        </div>
     </div>
     <div id="fieldMain">
         <div style="margin-top: 20px; margin-left: 20px;">
-        <select>
-            <option>RTU</option>
-            <option>TCP</option>
-        </select>
-        <select id="port">
-
-        </select>
-        <button onclick="mainConnect()">connect</button>
-        <button onclick="mainDisconnect()">disconnect</button>
+           <div id="parameters">
+            <div class="connectionRow"><div class="param">Тип подключения:</div>
+                <select>
+                    <option>RTU</option>
+                    <option>TCP</option>
+                </select>
             </div>
+            <div class="connectionRow">
+                <div class="param">Порт:</div>
+                <select id="port">
+                </select>
+            </div>
+            <div class="connectionRow">
+                <div class="param">BaudRate:</div>
+                <input class="inputParam" type="number" value="9600">
+            </div>
+            <div class="connectionRow">
+                <div class="param">DataBits:</div>
+                <input class="inputParam" type="number" value="8">
+            </div>
+            <div class="connectionRow">
+                <div class="param">StopBits:</div>
+                <input class="inputParam" type="number" value="1">
+            </div>
+            <div class="connectionRow">
+                <div class="param">Echo:</div>
+                <input class="inputParam" type="number" value="0">
+            </div>
+            <div class="connectionRow">
+                <div class="param">Parity:</div>
+                <input class="inputParam" type="number" value="0">
+            </div>
+        </div>
+            <button onclick="mainConnect()">connect</button>
+            <button onclick="mainDisconnect()">disconnect</button>
+        </div>
     </div>
 </div>
 </body>

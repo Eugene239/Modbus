@@ -5,9 +5,11 @@ function isConnect(){
         type: "POST",
         data:{'action':"status"},
         success: function (resp) {
-            if (!JSON.parse(resp.entity)) connected = false;
-            else connected = true;
-           // console.log(resp.entity);
+            connected =JSON.parse(resp.entity);
+            if (connected) {
+                $("#status").text("Подключен");
+            }
+            else  $("#status").text("Не подключен");
         }
     });
 }
@@ -20,6 +22,19 @@ function parameters(type , action, portName){
             console.log("parameters: type: "+type+" action:"+action+"--->" + resp.status);
             if (action=='create' && resp.status==200){
                 connectToMOdbus("connect");
+            }
+
+        }
+    });
+}
+function getParameters(){
+    $.ajax({
+        url: "/parameters",
+        type: "POST",
+        data:{},
+        success: function (resp) {
+            if (resp.entity!=null){
+                console.log(resp.entity);
             }
 
         }
@@ -38,6 +53,7 @@ function connectToMOdbus(action){
             if (action=='connect' && resp.status==200){
                 alert("connected to"+resp.entity.serialPort);
                 connected=true;
+                $("#status").innerHTML="Подключен";
             }
         }
     });
@@ -49,7 +65,7 @@ function mainConnect(){
 function mainDisconnect(){
     disconnect();
     connected = false;
-
+    $("#status").innerHTML="Не подключен";
 }
 
 function getPorts(){
@@ -84,5 +100,10 @@ function update() {
         updateCoils();
         updateHregs();
     }
+}
+function mainInit(){
+    getPorts();
+    isConnect();
+    getParameters();
 }
 
