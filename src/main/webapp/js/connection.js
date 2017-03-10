@@ -13,17 +13,21 @@ function isConnect(){
         }
     });
 }
-function parameters(type , action, portName){
+function parameters(type , action, portName, baudRate, dataBits,stopBits, echo, parity){
+    console.log("["+portName+" "+ baudRate+" "+ dataBits+" "+stopBits+" "+echo+" "+parity+"]");
     $.ajax({
         url: "/parameters",
         type: "POST",
-        data:{'type':type, 'action':action,'portName':portName},
+        data:{'type':type, 'action':action,'portName':portName, 'baudRate':baudRate, 'dataBits':dataBits, 'stopBits':stopBits,'echo':echo!=0, 'parity':parity},
         success: function (resp) {
             console.log("parameters: type: "+type+" action:"+action+"--->" + resp.status);
             if (action=='create' && resp.status==200){
                 connectToMOdbus("connect");
             }
 
+        },
+        error: function(resp){
+            console.log(resp);
         }
     });
 }
@@ -43,7 +47,6 @@ function getParameters(){
 function connectToMOdbus(action){
     //action
     //  status, connect
-
     $.ajax({
         url: "/connect",
         type: "POST",
@@ -51,16 +54,23 @@ function connectToMOdbus(action){
         success: function (resp) {
             console.log('connectToMOdbus:' + action+"--->"+resp.status);
             if (action=='connect' && resp.status==200){
-                alert("connected to"+resp.entity.serialPort);
+                alert("connected to "+ $("#port :selected").text());
                 connected=true;
                 $("#status").innerHTML="Подключен";
+            } else {
+                alert("Не удалось подключиться");
             }
+
+        },
+        error: function(resp){
+            console.log(resp);
+
         }
     });
 }
 function mainConnect(){
-    console.log( $("#port :selected").text());
-    parameters("RTU","create", $("#port :selected").text());
+ //   console.log( $("#port :selected").text());
+    parameters("RTU","create", $("#port :selected").val(), $("#baudRate").val(), $("#dataBits").val(), $("#stopBits").val(),$("#echo").val(),$("#parity").val());
 }
 function mainDisconnect(){
     disconnect();

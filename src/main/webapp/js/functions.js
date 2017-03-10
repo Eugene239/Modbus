@@ -40,7 +40,7 @@ function writeCoil(id, value){
             type: "POST",
             data: {'id': id, 'value': !JSON.parse(value)}
         });
-        //update();
+        updateCoils();
     }
 }
 function writeRegister(id, value){

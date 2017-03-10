@@ -131,7 +131,9 @@ public class RestController {
                 System.out.println("[CONNECTED TO " + connectionParameters.getSerialPort() + "]");
                 return Response.ok().entity(modbus.isConnected()).build();
             } catch (Exception e) {
+                e.printStackTrace();
                 return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.toString()).build();
+
             }
         }
         return Response.noContent().build();

@@ -177,3 +177,24 @@ select{
     text-align: left;
     border: 1px solid rgb(169,169,169);
 }
+.buttonCon{
+    display: inline-block;
+    width: 150px;
+    background-color: black;
+    color: white;
+    font-size: large;
+
+    padding: 5px;
+    border: none;
+}
+.buttonCon:hover{
+    background-color: gray;
+}
+.buttonsCon{
+    float: left;
+    display: table;
+    margin-top: 5px;
+    margin-left: 140px;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+}

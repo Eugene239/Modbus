@@ -69,6 +69,7 @@ public class ModbusRTU implements ModbusConnection {
         modbus = new ModbusSerialMaster(parameters);
         modbus.connect();
         connected = true;
+        modbus.readCoils(0,10);
     }
 
     public void disconnect() {

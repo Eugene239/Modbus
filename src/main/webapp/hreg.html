@@ -13,34 +13,9 @@
     //    $("#rangeId").on('input',function(){
     //       alert(this.value)
     //    });
-    setInterval(function(){update();}, 500);
+   // setInterval(function(){update();}, 500);
     // updateCoils();
-    function color(){
-        console.log(hexToRgb($("#color").val()).r);
-        writeRegister(0,hexToRgb($("#color").val()).r);
-        writeRegister(1,hexToRgb($("#color").val()).g);
-        writeRegister(2,hexToRgb($("#color").val()).b);
-        console.log(hexToRgb($("#color").val()).g);
-        console.log(hexToRgb($("#color").val()).b);
-    }
-    function range(ent){
-        //  console.log(ent);
-        //  writeRegister(0,ent);
-    }
-    function hexToRgb(hex) {
-        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-            return r + r + g + g + b + b;
-        });
 
-        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-    }
 </script>
 <div id="main">
     <div id="menu">
@@ -48,33 +23,32 @@
             <img id="modbusImage" src="images/modbus.png">
         </div>
 
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText" onclick="window.location='main.html'">Подключение </span>
         </div>
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText"  onclick="window.location='index.html'">Coils </span>
         </div>
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText" style="background: grey" onclick="window.location='hreg.html'">Hregs</span>
         </div>
-        <div  class="menuColumn">
+        <div class="menuColumn">
             <span class="menuColumnText">Настройка </span>
         </div>
-        <div  class="menuColumn" style="bottom: 0px; position: absolute">Статус: Подключен</div>
+        <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Неизвестно</span>
+        </div>
     </div>
     <div id="fieldMain">
-        <div id="field" style="  margin-left: 20px; background-color: black">
-            <div class="headerField" style="margin-top: 10px">Hregs  <div style="float: right; margin-right: 10px">От <input type="number" class="input_value" value="0"> До <input type="number" class="input_value" value="100"></div> </div>
-            <div id="hregs" class="coilField">
+        <div id="field" >
+            <div class="headerField" style="margin-top: 10px">Hregs
+                <div style="float: right; margin-right: 10px">От <input id="above" type="number" class="input_value"
+                                                                        value="0"> До
+                    <input id="below" type="number" class="input_value" value="10"></div>
+            </div>
+            <div id="coils" class="coilField">
 
             </div>
         </div>
-        <input id="color" type="color" onchange="color()">
-        <!--<div id="hreg" style="width: 200px; height: 200px; margin: auto; background-color: white">-->
-
-        <!--<input id="rangeId" type="range" value="0" max="255" min="0" onchange="range(value)" oninput="$('#rangeValue').html(value);">-->
-        <!--<span id="rangeValue">0</span>-->
-        <!--</div>-->
     </div>
 </div>
 
