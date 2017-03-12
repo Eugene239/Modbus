@@ -70,13 +70,14 @@ public class RestController {
             @RequestParam(value = "value") String value) {
         System.out.println("/setCoil::" + id + ":" + value);
         try {
+            if (!modbus.isConnected()) throw new Exception("NO CONNECTION");
             int _id = Integer.parseInt(id);
             boolean _value = Boolean.parseBoolean(value);
             modbus.writeCoil(_id, _value);
             return Response.status(200).build();
         } catch (Exception e) {
             System.err.println(e.toString());
-            return Response.status(400).build();
+            return Response.status(400).entity(e.toString()).build();
         }
     }
 
@@ -84,6 +85,7 @@ public class RestController {
     public Response setHreg(@RequestParam(value = "id") String id,
                             @RequestParam(value = "value") String value) {
         try {
+            if (!modbus.isConnected()) throw new Exception("NO CONNECTION");
             int _id = Integer.parseInt(id);
             int _value = Integer.parseInt(value);
             System.out.println("/setHreg::" + id + ":" + value);
@@ -91,7 +93,7 @@ public class RestController {
             return Response.status(200).build();
         } catch (Exception e) {
             System.err.println(e.toString());
-            return Response.status(400).build();
+            return Response.status(400).entity(e.toString()).build();
         }
     }
 

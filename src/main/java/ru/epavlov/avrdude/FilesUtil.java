@@ -1,7 +1,10 @@
 package ru.epavlov.avrdude;
 
+import jssc.SerialPortList;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Eugene on 07.03.2017.
@@ -26,6 +29,7 @@ public class FilesUtil {
         }
     }
     private boolean checkMakeFile(File f){
+        if (f.listFiles()==null) return  false;
         for (File f_: f.listFiles()){
             if(f_.getName().equals("Makefile"))
                 return true;
@@ -34,9 +38,11 @@ public class FilesUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        FilesUtil filesUtil = new FilesUtil();
-        filesUtil.getSketches().forEach(file -> {
-            System.out.println(file.getName()+" "+ filesUtil.checkMakeFile(file));
-        });
+//        FilesUtil filesUtil = new FilesUtil();
+//        filesUtil.getSketches().forEach(file -> {
+//            System.out.println(file.getName()+" "+ filesUtil.checkMakeFile(file));
+//        });
+
+        System.out.println(Arrays.toString(SerialPortList.getPortNames()));
     }
 }

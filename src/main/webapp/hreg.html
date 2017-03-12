@@ -9,14 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body  onload="isConnect()">
-<script>
-    //    $("#rangeId").on('input',function(){
-    //       alert(this.value)
-    //    });
-   // setInterval(function(){update();}, 500);
-    // updateCoils();
 
-</script>
 <div id="main">
     <div id="menu">
         <div id="headerMenu">
@@ -45,13 +38,31 @@
                                                                         value="0"> До
                     <input id="below" type="number" class="input_value" value="10"></div>
             </div>
-            <div id="coils" class="coilField">
-
+            <div id="hregs" class="coilField">
+                <div> <input id="rangeId0" type="range" max="255"></div><span id="rangeVal0"></span>
+                <div> <input id="rangeId1" type="range" max="255"></div><span id="rangeVal1"></span>
+                <div> <input id="rangeId2" type="range" max="255"></div><span id="rangeVal2"></span>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+     $("#rangeId0").on('input',function(){
+         $("#rangeVal0").text($("#rangeId0").val());
+         writeRegister(0,$("#rangeId0").val());
+     });
+     $("#rangeId1").on('input',function(){
+         $("#rangeVal1").text($("#rangeId1").val());
+         writeRegister(1,$("#rangeId1").val());
+     });
+     $("#rangeId2").on('input',function(){
+         $("#rangeVal2").text($("#rangeId2").val());
+         writeRegister(2,$("#rangeId2").val());
+     });
+    // setInterval(function(){update();}, 500);
+    // updateCoils();
 
+</script>
 </body>
 </html>
