@@ -57,6 +57,7 @@ function connectToMOdbus(action){
                 alert("connected to "+ $("#port :selected").text());
                 connected=true;
                 $("#status").innerHTML="Подключен";
+                isConnect();
             } else {
                 alert("Не удалось подключиться");
             }

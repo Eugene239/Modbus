@@ -51,16 +51,17 @@ public class RestController {
     }
 
     @PostMapping("/hregs")
-    public ArrayList<Hreg> getHregs(@RequestParam(value = "offset", defaultValue = "0") String offset,
+    public Response getHregs(@RequestParam(value = "offset", defaultValue = "0") String offset,
                                     @RequestParam(value = "size", defaultValue = "0") String size, HttpServletRequest request) {
         ArrayList<Hreg> list = new ArrayList<>();
-        // System.out.println("/hregs::    offset:" + offset + "   size:" + size);
+         System.out.println("/hregs::    offset:" + offset + "   size:" + size);
         if (modbus.isConnected()) {
             modbus.getHregMap(Integer.parseInt(offset),Integer.parseInt(size)).forEach((i1,i2)->{
                 list.add(new Hreg(i1,i2));
             });
+            return Response.ok().entity(list).build();
         }
-        return list;
+        return Response.status(Response.Status.NOT_FOUND).build();
 
     }
 

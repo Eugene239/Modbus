@@ -4,10 +4,10 @@
     display: inline-block;
     width: 49px;
     height: 35px;
-    background-color: white;
     margin: 1px;
     border: 2px solid black;
     padding: 2px;
+    background-color: gray;
 }
 .coilButton:hover{
     color: white;
@@ -28,7 +28,7 @@
     background: rgb(255,105,98);
 }
 body{
-    background-image: url(/images/bg_fill.png);
+    background-image: url(bg_fill.png);
     background-repeat: repeat;
     /*background-size: repeat;*/
 }
@@ -144,6 +144,7 @@ body{
     /*display: inline-table;*/;
     margin-top: 45px;
     /*padding-top: 5px;*/
+    margin-right: 20px;
     padding-left: 10px;
     margin-left: 25px;
 }
@@ -197,4 +198,24 @@ select{
     margin-left: 140px;
     /*margin-left: auto;*/
     /*margin-right: auto;*/
+}
+.hregdiv{
+    margin-top: 10px;
+    vertical-align: middle;
+    height: 50px;
+    padding-left: 15px;
+    width: 40%;
+    display: inline-block;
+}
+.hregrange{
+    display: inline-block;
+    vertical-align: middle;
+}
+.hregval{
+    /*display: inline-block;*/
+    width: 30px;
+    vertical-align: middle;
+    border: none;
+    margin-left: 10px;
+
 }

@@ -1,0 +1,115 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ячейки</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/connection.js"></script>
+    <script src="js/modbus.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body onload=" hregInit();">
+
+<div id="main">
+    <div id="menu">
+        <div id="headerMenu">
+            <img id="modbusImage" src="images/modbus.png">
+        </div>
+
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='main.html'">Подключение </span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='index.html'">Coils </span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" style="background: grey" onclick="window.location='hreg.html'">Hregs</span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText">Настройка </span>
+        </div>
+        <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Неизвестно</span>
+        </div>
+    </div>
+    <div id="fieldMain">
+        <div id="field">
+            <div class="headerField" style="margin-top: 10px">Hregs
+                <div style="float: right; margin-right: 10px">Сдвиг <input id="above" type="number" class="input_value"
+                                                                           value="0"> Кол-во
+                    <input id="below" type="number" class="input_value" value="10"></div>
+            </div>
+            <div id="hregs" class="coilField">
+                <div class="hregdiv">1
+                    <input class="hregrange" id="rangeId0" type="range" value="0" max="255">
+                    <input class="hregval" id="rangeVal0" value="0">
+                </div>
+                <div class="hregdiv">2
+                    <input class="hregrange" id="rangeId1" type="range" value="0" max="255">
+                    <input class="hregval" id="rangeVal1" value="0">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function hregInit() {
+        isConnect();
+        $("#above").val(offset);
+        $("#below").val(hregSize);
+        updateHregDiv();
+    }
+    ;
+    $("#above").on("input", function () {
+        updateHregDiv()
+    });
+    $("#below").on("input", function () {
+        updateHregDiv()
+    });
+
+    function updateHregDiv() {
+        offset = $("#above").val();
+        hregSize = $("#below").val();
+        $("#hregs").empty();
+        for (var i = 0; i < hregSize; i++) {
+            var x = Number(offset) + Number(i);
+            var div = document.createElement("DIV");
+            div.setAttribute("class", "hregdiv");
+            var text = document.createElement("span");
+            text.innerHTML = (x);
+            div.appendChild(text);
+            var range = document.createElement("INPUT");
+            range.setAttribute("type", "range");
+            range.setAttribute("class", "hregrange");
+            range.setAttribute("code", x);
+            range.setAttribute("max",255);
+            var val = document.createElement("input");
+            val.setAttribute("class", "hregval");
+            val.setAttribute("id", "hregval" + x);
+            val.setAttribute("value", 0);
+            val.setAttribute("code",x);
+            range.setAttribute("value", 0);
+            range.setAttribute("id", "hregrange" + x);
+            div.appendChild(range);
+            div.appendChild(val);
+            $("#hregs").append(div);
+            $("#hregrange"+x).on('input', function (){
+                $("#hregval"+$(this).attr("code")).val($(this).val());
+                writeRegister($(this).attr("code"),$(this).val());
+                //console.log(">>"+$(this).attr("code")+">>"+$(this).val());
+            });
+            $("#hregval"+x).on("change",function(){
+                $("#hregrange"+$(this).attr("code")).val($(this).val());
+                writeRegister($(this).attr("code"),$(this).val());
+            });
+        }
+    }
+
+    setInterval(
+            function () {
+                isConnect();
+                if (connected && hregSize <= 500) updateHregs(offset, hregSize);
+            }, 500);
+</script>
+</body>
+</html>

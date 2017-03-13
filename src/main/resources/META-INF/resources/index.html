@@ -8,7 +8,7 @@
     <script src="js/modbus.js"></script>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
-<body onload="isConnect()">
+<body onload="coilInit()">
 <script>
     setInterval(
             function () {
@@ -53,7 +53,40 @@
         </div>
     </div>
 </div>
-
-
 </body>
+<script>
+    $("#above").on("input", function () {
+        updateCoilDiv()
+    });
+    $("#below").on("input", function () {
+        updateCoilDiv()
+    });
+    function coilInit(){
+        isConnect();
+        $("#above").val(0);
+        $("#below").val(100);
+        updateCoilDiv();
+    }
+    function updateCoilDiv(){
+        offset = $("#above").val();
+        hregSize = $("#below").val();
+        $("#coils").empty();
+        for (i=0; i<hregSize;i++) {
+            //if(i%10==0)  $("#coils").append("<br>");
+            var b = document.createElement("BUTTON");
+            b.setAttribute("id", "coil" + (+i + +offset));
+            b.setAttribute("coilId", +i+ +offset);
+            b.setAttribute("value", false);
+            b.setAttribute("class", "coilButton");
+            //else b.setAttribute("class", "coilButton Off");
+            b.innerHTML = +i+ +offset;
+            b.onclick = function () {
+                writeCoil(this.getAttribute("coilId"), this.getAttribute("value"));
+                updateCoils();
+            };
+            // div.appendChild(b);
+            $("#coils").append(b);
+        }
+    }
+</script>
 </html>

@@ -88,6 +88,7 @@ public class ModbusRTU implements ModbusConnection {
             }
         } catch (ModbusException e) {
             e.printStackTrace();
+            return  map;
            // disconnect();
         }
 
@@ -98,12 +99,13 @@ public class ModbusRTU implements ModbusConnection {
     public HashMap<Integer, Integer> getHregMap(int offset, int size) {
         HashMap<Integer, Integer> map = new HashMap<>();
         try{
-            Register[] registers = modbus.readMultipleRegisters(id, offset, size);
+            Register[] registers = modbus.readMultipleRegisters(id,offset, size);
             for (int i = 0; i < registers.length; i++) {
                 map.put(offset + i, registers[i].getValue());
             }
         }catch (ModbusException e){
           //  disconnect();
+          //  connected=false;
            e.printStackTrace();
         }
         return map;
