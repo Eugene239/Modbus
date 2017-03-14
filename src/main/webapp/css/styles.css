@@ -2,7 +2,8 @@
     position: relative;
     /*display: table;*/
     display: inline-block;
-    width: 49px;
+    /*width: 49px;*/
+    min-width: 49px;
     height: 35px;
     margin: 1px;
     border: 2px solid black;
@@ -107,7 +108,6 @@ body{
    margin-top: 2px;
     /*margin-bottom: 14px;*/
     /*margin-left: 2px;*/
-
     /*display: inline-block;*/
 }
 #field{
@@ -130,6 +130,20 @@ body{
     margin-left: 10px;
     width: 91%;
 }
+.headerDesc{
+    background-color: whitesmoke;
+    position: absolute;
+    display: inline-block;
+    color: black;
+    padding: 5px;
+    padding-left: 10px;
+    border: 2px solid black;
+    padding-right: 10px;
+    margin-right: 10px;
+    margin-top: 40px;
+    margin-left: 10px;
+    width: 91%;
+}
 .input_value{
     width: 50px;
     margin-right: 10px;
@@ -142,7 +156,7 @@ body{
     /*position: absolute;*/
     overflow-y: scroll;
     /*display: inline-table;*/;
-    margin-top: 45px;
+    margin-top: 75px;
     /*padding-top: 5px;*/
     margin-right: 20px;
     padding-left: 10px;
@@ -199,6 +213,10 @@ select{
     /*margin-left: auto;*/
     /*margin-right: auto;*/
 }
+#fileField{
+    height: 20%;
+    overflow-y: scroll;
+}
 .hregdiv{
     margin-top: 10px;
     vertical-align: middle;
@@ -218,4 +236,39 @@ select{
     border: none;
     margin-left: 10px;
 
+}
+.files{
+
+
+   margin-left: 20px;
+    margin-right: 30px;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: white;
+    position: relative;
+    border: 1px solid black;
+
+}
+.descBtn{
+    width: 110px;
+    display: inline-block;
+    background-color: black;
+    float: right;
+    border: 0;
+    color: white;
+
+}
+.descBtn:hover{
+    background-color: gray;
+}
+.descTXT{
+    display: inline-block;
+    margin-left: 20px;
+    height: 50%;
+    margin-right: 20px;
+    margin-top: 20px;
+    border: 1px solid black;
+    width: 556px;
+    resize: none;
+    overflow-y: scroll;
 }

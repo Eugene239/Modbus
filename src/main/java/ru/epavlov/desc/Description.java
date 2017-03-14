@@ -29,6 +29,17 @@ public class Description {
         }
         return files;
     }
+    public boolean createEmptyFile(String name){
+        File f = new File(description+name);
+        try {
+             return f.createNewFile();
+            //  FileWriter fw = new FileWriter(f);
+            //Files.write(f.toPath(), bytes, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public void add(byte[] bytes, String name){
         File f = new File(description+name);
         try {
@@ -42,6 +53,20 @@ public class Description {
     public boolean delete(String name){
         File f = new File(description+name);
         return f.delete();
+    }
+    public String getRaw(String name){
+        final String[] out = {""};
+        File f = new File(description+name);
+        if (f.exists()){
+            try {
+                Files.readAllLines(f.toPath()).stream().forEach(s1->{
+                    out[0] +=s1;
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return out[0];
     }
     public ArrayList<Desc_Entity> getDesc(String name){
         ArrayList<Desc_Entity> list = new ArrayList<>();

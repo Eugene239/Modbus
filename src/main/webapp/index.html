@@ -1,0 +1,76 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ячейки</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/connection.js"></script>
+    <script src="js/modbus.js"></script>
+    <script src="js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body onload="coilInit()">
+<!--<script>-->
+    <!--setInterval(-->
+            <!--function () {-->
+                <!--x = $("#above").val();-->
+                <!--y = $("#below").val();-->
+                <!--isConnect();-->
+                <!--if (connected && y <= 500) updateCoils(x, y);-->
+            <!--}, 500);-->
+
+<!--</script>-->
+<div id="main">
+    <div id="menu">
+        <div id="headerMenu">
+            <img id="modbusImage" src="images/modbus.png">
+        </div>
+
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='main.html'">Подключение </span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" style="background: grey" onclick="window.location='index.html'">Coils </span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='hreg.html'">Hregs</span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText"  onclick="window.location='desc.html'">Описания</span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText">Настройка </span>
+        </div>
+        <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Неизвестно</span>
+        </div>
+    </div>
+    <div id="fieldMain">
+        <div id="field" >
+            <div class="headerField" style="margin-top: 10px"> Coils
+                <div style="float: right; margin-right: 10px;">
+                    Сдвиг <input id="above" type="number" class="input_value" value="0">
+                    Кол-во <input id="below" type="number" class="input_value" value="100"></div>
+            </div>
+            <div class="headerDesc"> Описание <select  id="selectDesc" style="background-color: white; width: 165px; float: right; margin-right: 20px"><option></option></select></div>
+            <div id="coils" class="coilField">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#above").on("input", function () {
+        updateCoilDiv()
+    });
+    $("#below").on("input", function () {
+        updateCoilDiv()
+    });
+    $("#selectDesc").on("input",function(){
+        getDesc($("#selectDesc :selected").val()+".json");
+       // console.log($("#selectDesc :selected").val()+".json");
+       // updateCoilDiv();
+    });
+
+</script>
+</html>

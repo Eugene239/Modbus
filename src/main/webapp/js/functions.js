@@ -14,7 +14,7 @@ function updateCoils(offset, size){
                 //$("#coils").empty();
                 for (i=0; i<resp.length;i++){
                     var b = document.getElementById("coil"+ (+offset + +i));
-                    b.innerHTML=+offset+ +i;
+                    //b.innerHTML=+offset+ +i;
                     if (resp[i].value){
                         b.setAttribute("class","coilButton On");
                     }else {

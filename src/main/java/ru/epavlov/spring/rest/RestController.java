@@ -190,8 +190,14 @@ public class RestController {
             ArrayList<Desc_Entity> list = description.getDesc(name);
             if (list.size()>0)  return Response.ok().entity(description.getDesc(name)).build();
         }
+        if (action.equals("raw") && description.getFiles().contains(name)){
+            return Response.ok().entity(description.getRaw(name)).build();
+        }
         if (action.equals("delete") && description.getFiles().contains(name)){ //удаляем файл
             return Response.ok().entity(description.delete(name)).build();
+        }
+        if (action.equals("create") && !description.getFiles().contains(name)){ //создаем пустой файл
+            return Response.ok().entity(description.createEmptyFile(name)).build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }

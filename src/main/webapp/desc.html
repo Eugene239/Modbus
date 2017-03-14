@@ -1,0 +1,57 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ячейки</title>
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/connection.js"></script>
+    <script src="js/modbus.js"></script>
+    <script src="js/desc.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body onload="getList()">
+<div id="main">
+    <div id="menu">
+        <div id="headerMenu">
+            <img id="modbusImage" src="images/modbus.png">
+        </div>
+
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='main.html'">Подключение </span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='index.html'">Coils </span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" onclick="window.location='hreg.html'">Hregs</span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText" style="background: grey" onclick="window.location='desc.html'">Описания</span>
+        </div>
+        <div class="menuColumn">
+            <span class="menuColumnText">Настройка </span>
+        </div>
+        <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Неизвестно</span>
+        </div>
+
+        </div>
+        <div id="fieldMain">
+            <div class="headerField" style="margin-top: 10px; position: relative">Описания</div>
+            <div id =fileField>
+                <div class="files">Файлы <button class="descBtn">Удалить</button><button class="descBtn">Смотреть</button></div>
+            </div>
+           <div class="files" style="width: 250px;height: 19px; margin: auto; margin-top: 20px;">
+               <input id="inputName" type="text" style="width: 60%" placeholder="Имя описания"/>
+               <button class="descBtn" style="width: 40%; padding:3px">Добавить</button>
+           </div>
+            <textarea id="text" class="descTXT" disabled="disabled" rows="10"></textarea>
+        </div>
+    </div>
+</body>
+<script>
+//    $("#watch0").click(function(){
+//        console.log("click");
+//        getRawText($(this).attr("name"));
+//    });
+</script>
+</html>
