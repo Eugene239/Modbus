@@ -3,7 +3,10 @@ package ru.epavlov.spring.rest;
 import jssc.SerialPortList;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import ru.epavlov.desc.Description;
 import ru.epavlov.entity.Coil;
+import ru.epavlov.entity.Desc_Entity;
 import ru.epavlov.entity.Hreg;
 import ru.epavlov.modbus.ConnectionParameters;
 import ru.epavlov.modbus.ModbusConnection;
@@ -11,6 +14,7 @@ import ru.epavlov.modbus.ModbusRTU;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,7 +38,7 @@ public class RestController {
 
 
     private ModbusConnection modbus = new ModbusRTU("");
-
+    private Description description = new Description();
 
     @PostMapping("/coils")
     public ArrayList<Coil> getCoils(
@@ -176,4 +180,29 @@ public class RestController {
         return Response.status(Response.Status.NOT_FOUND).build();
 
     }
+    @PostMapping("description")
+    public Response getDesc(@RequestParam(value = "action", defaultValue = "getList") String action,
+                            @RequestParam(value = "name", defaultValue = "") String name){
+        if (action.equals("getList")){
+            return Response.ok().entity(description.getFiles()).build(); // возвращаем список описаний
+        }
+        if (action.equals("get")&& !name.equals("")){ //получаем список значений из файла
+            ArrayList<Desc_Entity> list = description.getDesc(name);
+            if (list.size()>0)  return Response.ok().entity(description.getDesc(name)).build();
+        }
+        if (action.equals("delete") && description.getFiles().contains(name)){ //удаляем файл
+            return Response.ok().entity(description.delete(name)).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+    @PostMapping("/addDesc")
+    public Response addDesc(@RequestParam("file") MultipartFile multipartFile,
+                            @RequestParam(value = "name", defaultValue = "") String name ) throws IOException {
+        if (!description.getFiles().contains(name) && !name.equals("")){
+            description.add(multipartFile.getBytes(),name);
+            return  Response.ok().entity(description.getFiles()).build();
+        }
+        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+    }
+
 }

@@ -13,7 +13,7 @@ public class FilesUtil {
     public final static String getOutPath = FilesUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     public final static String sketches = FilesUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath()+"sketches";
     public final static String arduinoLibs = FilesUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath()+"libs";
-    public final static String description = FilesUtil.class.getProtectionDomain().getCodeSource().getLocation().getPath()+"description";
+
 
     public ArrayList<File> getSketches() throws Exception {
         File f = new File(getOutPath+"sketches");

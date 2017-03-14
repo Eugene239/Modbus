@@ -51,7 +51,12 @@ function writeCoil(id, value){
             type: "POST",
             data: {'id': id, 'value': !JSON.parse(value)},
             success:function(data){
-                updateCoils(x,y);
+                //console.log(data);
+                if (data.status==200) {
+                    updateCoils(x, y);
+                } else {
+                  alert(data.entity);
+                }
             }
         });
 
