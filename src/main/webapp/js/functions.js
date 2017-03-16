@@ -15,6 +15,7 @@ function updateCoils(offset, size){
                 for (i=0; i<resp.length;i++){
                     var b = document.getElementById("coil"+ (+offset + +i));
                     //b.innerHTML=+offset+ +i;
+                    b.setAttribute("value",resp[i].value);
                     if (resp[i].value){
                         b.setAttribute("class","coilButton On");
                     }else {
@@ -26,7 +27,7 @@ function updateCoils(offset, size){
                   //  var b = document.createElement("BUTTON");
                   //  b.setAttribute("id","coil"+resp[i].id);
                   //  b.setAttribute("coilId",resp[i].id);
-                  //  b.setAttribute("value",resp[i].value);
+                   // b.setAttribute("value",resp[i].value);
                   //  if (resp[i].value) b.setAttribute("class","coilButton On");
                   //  else b.setAttribute("class","coilButton Off");
                   //  b.innerHTML=resp[i].id;

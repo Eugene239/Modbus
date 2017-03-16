@@ -138,8 +138,9 @@ public class RestController {
                 System.out.println("[CONNECTED TO " + connectionParameters.getSerialPort() + "]");
                 return Response.ok().entity(modbus.isConnected()).build();
             } catch (Exception e) {
+                modbus.disconnect();
                 e.printStackTrace();
-                return Response.status(Response.Status.NOT_ACCEPTABLE).entity(e.toString()).build();
+                return Response.noContent().build();
 
             }
         }
@@ -182,13 +183,14 @@ public class RestController {
     }
     @PostMapping("description")
     public Response getDesc(@RequestParam(value = "action", defaultValue = "getList") String action,
-                            @RequestParam(value = "name", defaultValue = "") String name){
+                            @RequestParam(value = "name", defaultValue = "") String name,
+                            @RequestParam(value = "text", defaultValue = "") String text){
         if (action.equals("getList")){
             return Response.ok().entity(description.getFiles()).build(); // возвращаем список описаний
         }
         if (action.equals("get")&& !name.equals("")){ //получаем список значений из файла
             ArrayList<Desc_Entity> list = description.getDesc(name);
-            if (list.size()>0)  return Response.ok().entity(description.getDesc(name)).build();
+            return Response.ok().entity(description.getDesc(name)).build();
         }
         if (action.equals("raw") && description.getFiles().contains(name)){
             return Response.ok().entity(description.getRaw(name)).build();
@@ -198,6 +200,10 @@ public class RestController {
         }
         if (action.equals("create") && !description.getFiles().contains(name)){ //создаем пустой файл
             return Response.ok().entity(description.createEmptyFile(name)).build();
+        }
+       // System.out.println(action+" "+name+" "+text);
+        if (action.equals("edit") && description.getFiles().contains(name) && !text.equals("")){
+            return Response.ok().entity(description.edit(name,text)).build();
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }

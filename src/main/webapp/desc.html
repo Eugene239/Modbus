@@ -42,13 +42,54 @@
             </div>
            <div class="files" style="width: 250px;height: 19px; margin: auto; margin-top: 20px;">
                <input id="inputName" type="text" style="width: 60%" placeholder="Имя описания"/>
-               <button class="descBtn" style="width: 40%; padding:3px">Добавить</button>
+               <button id="addDesc" class="descBtn" style="width: 40%; padding:3px">Добавить</button>
            </div>
-            <textarea id="text" class="descTXT" disabled="disabled" rows="10"></textarea>
+            <textarea id="text" class="descTXT"  rows="10"></textarea>
+          <div style="width: 90%; margin: auto">  <button id="saveChanges" class="descBtn" style="width: 200px; height: 25px; margin: auto">Сохранить изменения</button></div>
         </div>
     </div>
 </body>
 <script>
+    $("#addDesc").click(function(){
+        name = $("#inputName").val();
+        if (name!=""){
+            console.log(text);
+            $.ajax({
+                url: "/description",
+                type: "POST",
+                async:true,
+                data: {'action': 'create', 'name': name+".json"},
+                success:function(data){
+                    console.log(data);
+                    if (data.entity){
+                        $("#inputName").val('');
+                        getList();
+                    }else {
+                        alert("не удалось сохранить")
+                    }
+
+                }
+            });
+        }
+
+    });
+    $("#saveChanges").click(function(){
+        file = $("#text").attr("file");
+        text = $("#text").val();
+        console.log(text);
+        if (file!=undefined){
+            //console.log($("#text").text());
+            $.ajax({
+                url: "/description",
+                type: "POST",
+                async:true,
+                data: {'action': 'edit', 'name': file, 'text':text},
+                success:function(data){
+                    console.log(data);
+                }
+            });
+        }
+    });
 //    $("#watch0").click(function(){
 //        console.log("click");
 //        getRawText($(this).attr("name"));

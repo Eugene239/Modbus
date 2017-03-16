@@ -68,10 +68,24 @@ public class Description {
         }
         return out[0];
     }
+    public boolean edit(String name,String text){
+        File f =new File(description+name);
+        try {
+            FileWriter fw = new FileWriter(f);
+            fw.write(text);
+            fw.flush();
+            fw.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public ArrayList<Desc_Entity> getDesc(String name){
         ArrayList<Desc_Entity> list = new ArrayList<>();
         File f = new File(description+name);
       //  System.out.println(f.getPath());
+        s="";
         if (f.exists()){
             try {
                 JsonParser parser =new JsonParser();
@@ -84,8 +98,10 @@ public class Description {
                     JsonObject jo = (JsonObject) jsonElement;
                     list.add(new Desc_Entity(jo.get("id").getAsInt(),jo.get("desc").getAsString()));
                 });
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println(e.toString());
+                return null;
+
             }
         } else {
             System.err.println("File not found");

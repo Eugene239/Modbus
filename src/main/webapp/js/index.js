@@ -83,8 +83,13 @@ function getDesc(name){
             //console.log(data);
             if (data.status==200) {
                 //console.log(data.entity[0]);
-                desc = data.entity;
-                updateCoilDiv();
+                if (data.entity!=null) {
+                    desc = data.entity;
+                    updateCoilDiv();
+                } else {
+                    alert("Ошибка описания");
+                }
+
             }
         }
     });

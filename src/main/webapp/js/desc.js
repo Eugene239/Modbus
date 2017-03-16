@@ -59,19 +59,28 @@ function getList(){
 }
 function deleteDesc(name){
     console.log("watch: "+name);
-    $.ajax({
-        url: "/description",
-        type: "POST",
-        data: {'action': 'delete', 'name': name},
-        success:function(data){
-            //console.log(data);
-            getList();
-        }
-    });
+    var isDel= confirm("Вы действительно хотите удалть описание?");
+    if (isDel) {
+        $('#text').val('');
+        $.ajax({
+            url: "/description",
+            type: "POST",
+            data: {'action': 'delete', 'name': name},
+            success: function (data) {
+                //console.log(data);
+                getList();
+            }
+        });
+    }
 }
 
 function getRawText(name){
     console.log("watch: "+name);
+    $('#text').val('');
+    text = document.getElementById("text");
+    text.setAttribute("file",name);
+    //console.log(text.getAttribute("file"));
+    //$("#text").attr("file",name);
     $.ajax({
         url: "/description",
         type: "POST",
@@ -83,7 +92,7 @@ function getRawText(name){
             var re = new RegExp(find, 'g');
             str=data.entity.replace(re, '},\n');
            // var s =data.entity.replace(",",",69");
-            $("#text").append(str);
+            $("#text").val(str);
         }
     });
 }
