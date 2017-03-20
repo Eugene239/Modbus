@@ -29,6 +29,9 @@
             <span class="menuColumnText" style="background: grey" onclick="window.location='desc.html'">Описания</span>
         </div>
         <div class="menuColumn">
+            <span class="menuColumnText"   onclick="window.location='load.html'">Загрузка</span>
+        </div>
+        <div class="menuColumn">
             <span class="menuColumnText">Настройка </span>
         </div>
         <div class="menuColumn" style="bottom: 0px; position: absolute">Статус: <span id="status">Неизвестно</span>
@@ -37,7 +40,7 @@
         </div>
         <div id="fieldMain">
             <div class="headerField" style="margin-top: 10px; position: relative">Описания</div>
-            <div id =fileField>
+            <div id =fileField class="filesField">
                 <div class="files">Файлы <button class="descBtn">Удалить</button><button class="descBtn">Смотреть</button></div>
             </div>
            <div class="files" style="width: 250px;height: 19px; margin: auto; margin-top: 20px;">
@@ -50,6 +53,7 @@
     </div>
 </body>
 <script>
+    isConnect();
     $("#addDesc").click(function(){
         name = $("#inputName").val();
         if (name!=""){

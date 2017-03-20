@@ -16,13 +16,25 @@ import java.util.ArrayList;
  * Created by Eugene on 14.03.2017.
  */
 public class Description {
-    public final static String description = Description.class.getProtectionDomain().getCodeSource().getLocation().getPath()+"description\\";
+
+    public  static String description ;
+    static {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            try {
+                description = Files.readAllLines(new File(Description.class.getClassLoader().getResource("META-INF/resources/Settings.txt").getFile()).toPath()).get(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            description = "/usr/java/description/";
+        }
+    }
     private String s="";
     public ArrayList<String> getFiles(){
-       // System.out.println(description);
+        System.out.println(description);
         ArrayList<String> files = new ArrayList<>();
         File f = new File(description);
-        if (f.listFiles()!=null){
+        if (f.exists()&& f.listFiles()!=null){
             for (File f_ :f.listFiles()){
                 files.add(f_.getName());
             }
@@ -30,8 +42,12 @@ public class Description {
         return files;
     }
     public boolean createEmptyFile(String name){
+
         File f = new File(description+name);
         try {
+            if (!(new File(description).exists())){
+                (new File(description)).createNewFile();
+            }
              return f.createNewFile();
             //  FileWriter fw = new FileWriter(f);
             //Files.write(f.toPath(), bytes, StandardOpenOption.CREATE);
@@ -57,6 +73,7 @@ public class Description {
     public String getRaw(String name){
         final String[] out = {""};
         File f = new File(description+name);
+        System.out.println(f.getPath());
         if (f.exists()){
             try {
                 Files.readAllLines(f.toPath()).stream().forEach(s1->{
