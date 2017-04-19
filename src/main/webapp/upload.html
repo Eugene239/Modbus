@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/main.css"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="js/jquery-3.1.1.min.js"></script>
+</head>
+<body onload="initUpload()">
+
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Modbus</a>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Главная</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="connection.html">Подключение</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="monitor.html">Монитор порта</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="register.html">Регистры</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="descriptions.html">Описания</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="upload.html">Загрузка кода<span class="sr-only">(current)</span></a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Загрузка</h1>
+        <p>Выберете плату, порт и загрузите на неё скомпилированный код, все логи загрузки будут отображены</p>
+    </div>
+</div>
+<div class="container">
+    <form class="bd-example">
+        <div class="form-group row" >
+            <label class="col-2 col-form-label">Добавить</label>
+            <input type="file" class="form-control-file" id="inputFile" aria-describedby="fileHelp" style="margin: auto">
+            <button type="button" class="btn btn-success" id="addSketch" style="margin-right: 1rem; width: 8rem"><div class="loader"  style="display: none; width: 1rem; height: 1rem;border-width: 2px;   margin: 0.25rem; margin-bottom: 5px;" id="sketchLoader" ></div>Загрузить</button>
+        </div>
+        <div class="form-group row">
+            <label for="port" class="col-2 col-form-label">Порт</label>
+            <div class="col-10">
+                <select class=" form-control" id="port">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="port" class="col-2 col-form-label">Плата</label>
+            <div class="col-10">
+                <select class=" form-control" id="plata">
+                    <option>mega</option>
+                    <option>uno</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-2 col-form-label">Код</label>
+            <div class="col-10">
+                <div class="input-group">
+                    <select class=" form-control" id="code">
+                    </select>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" style="width: 8rem">
+                            Действие
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right " style="width: 8rem">
+                            <a class="dropdown-item" id="uploadBtn">Загрузить</a>
+                            <a class="dropdown-item"  id="deleteBtn">Удалить</a>
+                        </div>
+                    </div>
+                    <!--<span class="input-group-btn">-->
+                    <!--<button id="uploadBtn" class="btn  btn-success btn-secondary " type="button" style="width: 8rem">Загрузить</button>-->
+                         <!--</span>-->
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--<div class="form-group row">-->
+        <!--<label for="port" class="col-2 col-form-label">Baudrate</label>-->
+        <!--<div class="col-10">-->
+        <!--<select class=" form-control" id="baudrate">-->
+        <!--<option>9600</option>-->
+        <!--<option>19200</option>-->
+        <!--<option>38400</option>-->
+        <!--<option>57600</option>-->
+        <!--<option>74880</option>-->
+        <!--<option>115200</option>-->
+        <!--<option>230400</option>-->
+        <!--</select>-->
+        <!--</div>-->
+        <!--</div>-->
+        <div class="form-group" style="margin-top: 1rem">
+            <label for="textarea">Лог</label>
+            <textarea class="form-control" id="textarea" rows="15"></textarea>
+        </div>
+        <div class="form-group row" >
+            <div class="col-centered">
+                <button type="button"  id="clear" class="btn btn-success button_connecton">Очистить</button>
+                <button type="button" id="stopUpload" class="btn btn-danger button_connecton">Остановить</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+        integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+        crossorigin="anonymous"></script>
+<script src="js/connect.js"></script>
+<script src="js/upload.js"></script>
+<script src="js/connection.js"></script>
+</body>
+</html>

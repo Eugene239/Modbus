@@ -8,13 +8,15 @@ import java.util.ArrayList;
  * Created by Eugene on 07.03.2017.
  */
 public class ProcessBuilderUtil {
+    public static final String mega="wiring";
+    public static final String uno="arduino";
     private ArrayList<String> log = new ArrayList<>();
-    public static final String command = "java -version";
+    //public static final String command = "java -version";
 
-    public static final String dir ="C:\\Users\\Eugene\\Desktop\\avrdude\\Modbus\\";
-    public static final String modbusHEX1 = "javaModbusTest.ino.hex";
-    public static final String modbusHEX2 = "Modbus.ino.hex";
-    public static final String command2 = "avrdude -F -patmega2560 -b115200 -PCOM8 -cwiring -D -Uflash:w:"+dir+modbusHEX1+ ":i";
+    //public static final String dir ="C:\\Users\\Eugene\\Desktop\\avrdude\\Modbus\\";
+   // public static final String modbusHEX1 = "javaModbusTest.ino.hex";
+    //public static final String modbusHEX2 = "Modbus.ino.hex";
+    //public static final String command2 = "avrdude -F -patmega2560 -b115200 -PCOM8 -cwiring -D -Uflash:w:"+dir+modbusHEX1+ ":i";
     static Process p;
     static Thread thread;
     static int lastread=0;
@@ -23,7 +25,7 @@ public class ProcessBuilderUtil {
 
     }
 
-    public void startCommand(String file,String port)  {
+    public void startCommand(String file,String port,String plata)  {
         log.clear();
         lastread=0;
         //ProcessBuilder pb = new ProcessBuilder("ipconfig");
@@ -31,8 +33,12 @@ public class ProcessBuilderUtil {
             thread = new Thread(() -> {
                 System.out.println("[PROCESS THREAD]::"+Thread.activeCount());
                // ProcessBuilder pb = new ProcessBuilder("cmd.exe","/c",command);
-                ProcessBuilder pb=new ProcessBuilder("avrdude ","-F","-patmega2560","-b115200","-P"+port,"-cwiring","-D","-Uflash:w:"+file+":i");
-
+                System.out.println(port+" "+file);
+                ProcessBuilder pb=null;
+                switch (plata){
+                    case "mega":  pb=new ProcessBuilder("avrdude","-F","-patmega2560","-b115200","-P"+port,"-cwiring","-D","-Uflash:w:"+file+":i");break;
+                    case "uno":  pb=new ProcessBuilder("avrdude","-F","-patmega328p","-b115200","-P"+port,"-carduino","-D","-Uflash:w:"+file+":i"); break;
+                }
                 pb.redirectErrorStream(true);
                 try {
                     p =pb.start(); // Runtime.getRuntime().exec("dir V*");
@@ -44,6 +50,7 @@ public class ProcessBuilderUtil {
             });
             thread.start();
         }else {
+
             System.err.println("ONE PROCESS IN PROGRESS");
         }
         //new Thread(thread).start();
@@ -58,14 +65,23 @@ public class ProcessBuilderUtil {
         String s="";
         while (p.isAlive()) {
             while ((val = is.read()) != -1) {
-                if ((char) val != '\n') s += (char) val;
+                if ((char) val != System.getProperty("line.separator").toCharArray()[0]) s += (char) val;
                 else {
                     log.add(s);
-                    System.out.println(">"+s);
+                    //System.out.println(">"+s);
                     s = "";
 
                 }
             }
+        }
+    }
+    public void stop(){
+        if (inProcess()){
+            //System.err.println("[PROCESS THREAD]::"+Thread.activeCount());
+            p.destroy();
+            thread=null;
+            //thread.interrupt();
+            //System.err.println("[PROCESS THREAD]::"+Thread.activeCount());
         }
     }
 public boolean inProcess(){

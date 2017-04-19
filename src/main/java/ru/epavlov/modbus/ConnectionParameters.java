@@ -1,7 +1,5 @@
 package ru.epavlov.modbus;
 
-import com.ghgande.j2mod.modbus.util.SerialParameters;
-
 /**
  * Created by Eugene on 23.02.2017.
  */
@@ -9,47 +7,64 @@ public class ConnectionParameters {
      public enum TypeEnum{
         RTU,TCP
     }
-    private SerialParameters parameters = new SerialParameters();
+   // private SerialParameters parameters = new SerialParameters();
     private TypeEnum type = TypeEnum.RTU;
     private String ip;
+    private String serialPort="";
+    private int baudRate=9600;
+    private int dataBits=8;
+    private int stopBits=1;
+    private int parity =0;
+    private boolean echo=false;
     private int ipPort;
-
+    private int modbusId;
     public ConnectionParameters() {
     }
 
-    public ConnectionParameters(String serialPort, int baudRate, int databits, int stopBits, int parity, boolean echo) {
-        type = TypeEnum.RTU;
-        parameters.setEcho(echo);
-        parameters.setEncoding("rtu");
-        parameters.setStopbits(stopBits);
-        parameters.setDatabits(databits);
-        parameters.setPortName(serialPort);
-        parameters.setBaudRate(baudRate);
-        parameters.setParity(parity);
+    public ConnectionParameters(int modbusId, String serialPort, int baudRate, int databits, int stopBits, int parity, boolean echo) {
+        this.type = TypeEnum.RTU;
+        this.modbusId = modbusId;
+        this.serialPort =serialPort;
+        this.baudRate=baudRate;
+        this.dataBits=databits;
+        this.stopBits=stopBits;
+        this.parity =parity;
+        this.echo=echo;
     }
 
+    public ConnectionParameters(int modbusId, String ip,int port){
+        this.type=TypeEnum.TCP;
+        this.ip=ip;
+        this.ipPort=port;
+        this.modbusId=modbusId;
+    }
     public TypeEnum getType() {
         return type;
     }
 
+
     public String getSerialPort() {
-        return parameters.getPortName();
+        return serialPort;
     }
 
     public int getBaudRate() {
-        return parameters.getBaudRate();
+        return baudRate;
     }
 
-    public int getDatabits() {
-        return parameters.getDatabits();
+    public int getDataBits() {
+        return dataBits;
     }
 
     public int getStopBits() {
-        return parameters.getStopbits();
+        return stopBits;
     }
 
     public int getParity() {
-        return parameters.getParity();
+        return parity;
+    }
+
+    public boolean isEcho() {
+        return echo;
     }
 
     public String getIp() {
@@ -60,7 +75,9 @@ public class ConnectionParameters {
         return ipPort;
     }
 
-    protected SerialParameters getParameters() {
-        return parameters;
+
+
+    public int getModbusId() {
+        return modbusId;
     }
 }

@@ -1,0 +1,83 @@
+@media (min-width: 768px) and (max-width: 1000px) {
+    .collapse {
+        display: none !important;
+    }
+}
+body{
+    min-width:500px; /* suppose you want minimun width of 1000px */
+    width: auto !important;  /* Firefox will set width as auto */
+
+}
+.main{
+    background: black;
+    height: 100%;
+    width: 100%;
+}
+.img-responsive{
+    max-width: 100%;
+    height: auto;
+    display:block;
+}
+.bd-example{
+    padding: 1.5rem;
+    border-width: .2rem;
+    position: relative;
+    border: solid #f7f7f9;
+}
+.button_connecton{
+    display: inline-block;
+    width: 200px;
+
+}
+.button_connecton:hover{
+    cursor: pointer;
+}
+.col-centered{
+    /*float: none;*/
+    margin: 0 auto;
+}
+.loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #5cb85c; /* Blue */
+    border-radius: 50%;
+    width: 2rem;
+    margin: auto;
+    height: 2rem;
+    animation: spin 2s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#coils,#hregs{
+    cursor: pointer;
+}
+.reg_params{
+    position: absolute;
+    /* float: right; */
+    width: 75%;
+    margin: 5px;
+    right: 0px;
+
+}
+.input_params{
+    width: 50px;
+    margin-right: 1rem;
+    text-align: center;
+}
+.coilBtn{
+    float: left;
+    margin: 1px;
+    cursor: pointer;
+}
+.range{
+    background: #eceeef;
+    margin: 0 !important;
+    border: 1px solid rgba(0,0,0,.15);
+}
+

@@ -20,11 +20,7 @@ public class Description {
     public  static String description ;
     static {
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            try {
-                description = Files.readAllLines(new File(Description.class.getClassLoader().getResource("META-INF/resources/Settings.txt").getFile()).toPath()).get(0);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                description = "C:\\modbusRTUJ\\target\\description";
         } else {
             description = "/usr/java/description/";
         }

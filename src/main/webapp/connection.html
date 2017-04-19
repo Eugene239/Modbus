@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/main.css"/>
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+    <script src="js/jquery-3.1.1.min.js"></script>
+
+
+</head>
+<body onload="initConnect()">
+
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Modbus</a>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Главная</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="connection.html">Подключение<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="monitor.html">Монитор порта</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="register.html">Регистры</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="descriptions.html">Описания</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="upload.html">Загрузка кода</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Подключение</h1>
+        <p>Введите настройки для подключения к Modbus устройству и нажмите "Подключиться"</p>
+    </div>
+</div>
+<div class="container">
+    <div class="alert alert-warning alert-dismissible fade show " style="display: none" role="alert" id="alert-warning">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>Подключение отсутствует</strong>, заполните параметры ниже и нажмите кнопку "Подключиться".
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show" style="display: none" role="alert" id="alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>Не удалось подключиться</strong>
+    </div>
+    <div class="alert alert-success alert-dismissible fade show" style="display: none" role="alert" id="alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>Подключено</strong>
+    </div>
+    <form class="bd-example">
+        <div class="form-group row">
+            <label for="selectType" class="col-2 col-form-label">Тип</label>
+            <div class="col-10">
+                <select class=" form-control" id="selectType">
+                    <option>RTU</option>
+                    <option>TCP</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row" >
+            <label for="mbId" class="col-2 col-form-label">MbID</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="1" id="mbId">
+            </div>
+        </div>
+        <div class="form-group row" id="PORTROW">
+            <label for="port" class="col-2 col-form-label">Порт</label>
+            <div class="col-10">
+                <select class=" form-control" id="port">
+                </select>
+            </div>
+        </div>
+        <div class="form-group row" id="BAUDRATEROW">
+            <label for="port" class="col-2 col-form-label">Baudrate</label>
+            <div class="col-10">
+                <select class=" form-control" id="baudrate">
+                    <option>9600</option>
+                    <option>19200</option>
+                    <option>38400</option>
+                    <option>57600</option>
+                    <option>74880</option>
+                    <option>115200</option>
+                    <option>230400</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row" id="DATABITSROW">
+            <label for="data_bits" class="col-2 col-form-label">Databits</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="8" id="data_bits">
+            </div>
+        </div>
+        <div class="form-group row" id="IPROW">
+            <label for="data_bits" class="col-2 col-form-label">IP</label>
+            <div class="col-10">
+                <input class="form-control" type="text" value="192.168.1.44" id="IP">
+            </div>
+        </div>
+        <div class="form-group row" id="IPPORTROW">
+            <label for="data_bits" class="col-2 col-form-label">Port</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="502" id="IPport">
+            </div>
+        </div>
+        <div class="form-group row" id="STOPBITSROW">
+            <label for="stop_bits" class="col-2 col-form-label">Stopbits</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="1" id="stop_bits">
+            </div>
+        </div>
+        <div class="form-group row" id="ECHOROW">
+            <label for="echo" class="col-2 col-form-label">Echo</label>
+            <div class="col-10">
+                <select class=" form-control" id="echo">
+                    <option>false</option>
+                    <option>true</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row" id="PARITYROW">
+            <label for="parity" class="col-2 col-form-label">Parity</label>
+            <div class="col-10">
+                <input class="form-control" type="number" value="0" id="parity">
+            </div>
+        </div>
+
+        <div class="form-group row" >
+            <div class="col-centered">
+                <div class="loader" id="loader" style="display: none"></div>
+
+                <button type="button" id="connect"  class="btn btn-success button_connecton"> Подключиться</button>
+                <button type="button"  id="disconnect" class="btn btn-danger button_connecton">Отключиться</button>
+
+            </div>
+        </div>
+
+    </form>
+
+
+</div>
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="js/connection.js"></script>
+<script src="js/connect.js"></script>
+
+</body>
+
+</html>

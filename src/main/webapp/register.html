@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="js/jquery-3.1.1.min.js"></script>
+</head>
+<body onload="register_init()">
+
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">Modbus</a>
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/index.html">Главная</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="/connection.html">Подключение</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="/monitor.html">Монитор порта</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="register.html">Регистры<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="descriptions.html">Описания</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="upload.html">Загрузка кода</a>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+<div class="jumbotron">
+    <div class="container">
+        <h1>Регистры</h1>
+        <p>Чтение регистров Modbus, изменение состояния ячеек</p>
+    </div>
+</div>
+<div class="container">
+    <div id="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>Подключение отсутствует</strong>
+    </div>
+    <form class="bd-example">
+
+        <div class="form-group row">
+            <label for="descSelect" class="col-2 col-form-label">Описание</label>
+            <div class="col-10">
+                <select class=" form-control" id="descSelect">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+
+    </form>
+    <div class="card text-center" style="width: auto">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="coils">Coils</a>
+                </li>
+                <li>
+                    <div class="reg_params" >
+                        <a style="position: absolute; right: 120px">Сдвиг <input disabled class="input_params" id="offset_coils"
+                                                                                 value="0"></a>
+                        <a style="position: absolute; right: 0px;"> Кол-во <input class="input_params" id="count_coils"
+                                                                                  value="50"></a></div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="card-block row" id="fieldCoils" style="margin: 0.25rem">
+
+        </div>
+    </div>
+    <div class="card text-center"style="width: auto;">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="hregs">Hregs</a>
+                </li>
+                <li>
+                    <div class="reg_params">
+                        <a style="position: absolute; right: 120px">Сдвиг <input disabled class="input_params" id="offset_hregs"
+                                                                                 value="0"></a>
+                        <a style="position: absolute; right: 0px;"> Кол-во <input class="input_params" id="count_hregs"
+                                                                                  value="10"></a></div>
+                </li>
+            </ul>
+
+        </div>
+        <div class="card-block row" id="fieldHregs">
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- jQuery first, then Tether, then Bootstrap JS. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+<script src="js/connect.js"></script>
+<script src="js/register.js"></script>
+<script src="js/descriptions.js"></script>
+<script src="js/connection.js"></script>
+</body>
+</html>

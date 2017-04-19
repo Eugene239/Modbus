@@ -13,11 +13,7 @@ public class Sketch {
     public  static  String sketch ;
     static {
         if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            try {
-                sketch = Files.readAllLines(new File(Sketch.class.getClassLoader().getResource("META-INF/resources/Settings.txt").getFile()).toPath()).get(0)+"/sketch/";
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                sketch ="C:\\modbusRTUJ\\target\\sketch\\";
         } else {
             sketch = "/usr/java/sketch/";
         }
@@ -45,10 +41,17 @@ public class Sketch {
             e.printStackTrace();
         }
     }
-    public void upload(String fileName, String port)  {
+    public void delete(String fileName){
+        File f = new File(sketch+fileName);
+        if (f.exists()) f.delete();
+    }
+    public void upload(String fileName, String port,String plata)  {
         File f = new File(sketch+fileName);
         if (f.exists())
-        util.startCommand(f.getPath(), port);
+        util.startCommand(f.getPath(), port,plata);
+    }
+    public void stop(){
+        util.stop();
     }
     public ArrayList<String> getLogs(){
         return util.getLog();

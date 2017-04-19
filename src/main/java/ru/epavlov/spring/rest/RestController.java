@@ -3,29 +3,86 @@ package ru.epavlov.spring.rest;
 import jssc.SerialPortList;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import ru.epavlov.avrdude.ProcessBuilderUtil;
-import ru.epavlov.avrdude.Sketch;
-import ru.epavlov.desc.Description;
 import ru.epavlov.entity.Coil;
-import ru.epavlov.entity.Desc_Entity;
 import ru.epavlov.entity.Hreg;
 import ru.epavlov.modbus.ConnectionParameters;
 import ru.epavlov.modbus.ModbusConnection;
 import ru.epavlov.modbus.ModbusRTU;
+import ru.epavlov.modbus.ModbusTCP;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 @org.springframework.web.bind.annotation.RestController
 public class RestController {
-    ProcessBuilderUtil pb= new ProcessBuilderUtil();
-    private ConnectionParameters connectionParameters;
-    private Sketch sketch = new Sketch();
+    protected static ConnectionParameters connectionParameters;
+    protected static ModbusConnection modbus = new ModbusRTU();
+    @PostMapping("/parameters")
+    private Response parameters(
+            @RequestParam(value = "modbusId", defaultValue = "1") int id,
+            @RequestParam(value = "type", defaultValue = "RTU") String type,
+            @RequestParam(value = "action", defaultValue = "get") String action,
+            @RequestParam(value = "portName", defaultValue = "") String portName,
+            @RequestParam(value = "baudRate", defaultValue = "9600") int baudRate,
+            @RequestParam(value = "echo", defaultValue = "false") String echoS,
+            @RequestParam(value = "parity", defaultValue = "0") int parity,
+            @RequestParam(value = "dataBits", defaultValue = "8") int dataBits,
+            @RequestParam(value = "stopBits", defaultValue = "1") int stopBits,
+            @RequestParam(value = "ipPort", defaultValue = "502") int ipPort,
+            @RequestParam(value = "ip", defaultValue = "") String ip) {
+
+        if (action.equals("get")) {
+            //возвращаем подключение
+            return Response.ok().entity(connectionParameters).build();
+        }
+        try {
+            if (type.equals("RTU") && action.equals("create") && ports().contains(portName)) {
+                    boolean echo = Boolean.parseBoolean(echoS);
+                    connectionParameters = new ConnectionParameters(id,portName, baudRate, dataBits, stopBits, parity, echo);
+                    return Response.ok().entity(connectionParameters).build();
+            }
+            if (type.equals("TCP") && !ip.equals("")) {
+                connectionParameters = new ConnectionParameters(id, ip,ipPort);
+                return Response.ok().entity(connectionParameters).build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+
+    }
+
+    @PostMapping("/connect")
+    private Response connect(@RequestParam(value = "action", defaultValue = "status") String action) {
+        if (action.equals("status")) {
+            return Response.ok().entity(modbus.isConnected()).build();
+        }
+        if (action.equals("disconnect")) {
+            if (modbus.isConnected()) modbus.disconnect();
+            System.out.println("[DISCONNECTED]");
+            return Response.ok().entity(modbus.isConnected()).build();
+        }
+        if (action.equals("connect")) {
+            try {
+                if (modbus.isConnected()) modbus.disconnect();
+                switch (connectionParameters.getType()){
+                    case TCP: modbus= new ModbusTCP(); break;
+                    case RTU: modbus = new ModbusRTU(); break;
+                }
+                modbus.connect(connectionParameters);
+                System.out.println("[CONNECTED TO " + connectionParameters.getType() + "]");
+                return Response.ok().entity(modbus.isConnected()).build();
+            } catch (Exception e) {
+                modbus.disconnect();
+                e.printStackTrace();
+                return Response.noContent().build();
+            }
+        }
+        return Response.noContent().build();
+    }
    // private String port = "COM8";
     private static final String[] IP_HEADER_CANDIDATES = {
             "X-Forwarded-For",
@@ -41,28 +98,28 @@ public class RestController {
             "REMOTE_ADDR"};
 
 
-    private ModbusConnection modbus = new ModbusRTU("");
-    private Description description = new Description();
+
+
 
     @PostMapping("/coils")
     public ArrayList<Coil> getCoils(
-            @RequestParam(value = "offset", defaultValue = "0") String offset,
+            @RequestParam(value = "offset_coil", defaultValue = "0") String offset,
             @RequestParam(value = "size", defaultValue = "0") String size, HttpServletRequest request) {
         ArrayList<Coil> list = new ArrayList<>();
-        System.out.println("/coils :: offset: "+offset+"  size: "+size);
+        //System.out.println("/coils :: offset_coil: "+offset+"  size: "+size);
         int off = Integer.parseInt(offset);
         int sz = Integer.parseInt(size);
-        if (modbus.isConnected()&& sz>0 && sz<=500) {
+        if ( modbus.isConnected()&& sz>0 && sz<=500) {
             modbus.getCoilMap(off, sz).forEach((i,b)->list.add(new Coil(i,b)));
         }
         return list;
     }
 
     @PostMapping("/hregs")
-    public Response getHregs(@RequestParam(value = "offset", defaultValue = "0") String offset,
+    public Response getHregs(@RequestParam(value = "offset_coil", defaultValue = "0") String offset,
                                     @RequestParam(value = "size", defaultValue = "0") String size, HttpServletRequest request) {
         ArrayList<Hreg> list = new ArrayList<>();
-         System.out.println("/hregs::    offset:" + offset + "   size:" + size);
+         System.out.println("/hregs::    offset_coil:" + offset + "   size:" + size);
         if (modbus.isConnected()) {
             modbus.getHregMap(Integer.parseInt(offset),Integer.parseInt(size)).forEach((i1,i2)->{
                 list.add(new Hreg(i1,i2));
@@ -86,6 +143,11 @@ public class RestController {
             return Response.status(200).build();
         } catch (Exception e) {
             System.err.println(e.toString());
+            try {
+                modbus.connect(connectionParameters);// попытка переподключиться
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             return Response.status(400).entity(e.toString()).build();
         }
     }
@@ -102,6 +164,11 @@ public class RestController {
             return Response.status(200).build();
         } catch (Exception e) {
             System.err.println(e.toString());
+            try {
+                modbus.connect(connectionParameters); // попытка переподключиться
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             return Response.status(400).entity(e.toString()).build();
         }
     }
@@ -125,139 +192,9 @@ public class RestController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    @PostMapping("/connect")
-    private Response connect(@RequestParam(value = "action", defaultValue = "status") String action) {
-        if (action.equals("status")) {
-            return Response.ok().entity(modbus.isConnected()).build();
-        }
-        if (action.equals("disconnect")) {
-            if (modbus.isConnected()) modbus.disconnect();
-            System.out.println("[DISCONNECTED]");
-            return Response.ok().entity(modbus.isConnected()).build();
-        }
-        if (action.equals("connect")) {
-            try {
-                if (modbus.isConnected()) modbus.disconnect();
-                modbus.connect(connectionParameters);
-                System.out.println("[CONNECTED TO " + connectionParameters.getSerialPort() + "]");
-                return Response.ok().entity(modbus.isConnected()).build();
-            } catch (Exception e) {
-                modbus.disconnect();
-                e.printStackTrace();
-                return Response.noContent().build();
-
-            }
-        }
-        return Response.noContent().build();
+    private ArrayList<String> ports(){
+        return  new ArrayList<>(Arrays.asList(SerialPortList.getPortNames()));
     }
 
-    @PostMapping("/parameters")
-    private Response parameters(
-            @RequestParam(value = "type", defaultValue = "RTU") String type,
-            @RequestParam(value = "action", defaultValue = "get") String action,
-            @RequestParam(value = "portName", defaultValue = "COM8") String portName,
-            @RequestParam(value = "baudRate", defaultValue = "9600") int baudRate,
-            @RequestParam(value = "echo", defaultValue = "false") boolean echo,
-            @RequestParam(value = "parity", defaultValue = "0") int parity,
-            @RequestParam(value = "dataBits", defaultValue = "8") int dataBits,
-            @RequestParam(value = "stopBits", defaultValue = "1") int stopBits,
-            @RequestParam(value = "ipPort", defaultValue = "502") String ipPort,
-            @RequestParam(value = "ip", defaultValue = "") String ip
-    ) {
 
-        try {
-            if (type.equals("RTU")) {
-                if (action.equals("create")) {
-                    connectionParameters = new ConnectionParameters(portName, baudRate, dataBits, stopBits, parity, echo);
-                    return Response.ok().entity(connectionParameters).build();
-                }
-                if (action.equals("get")) {
-                    //возвращаем подключение
-                    return Response.ok().entity(connectionParameters).build();
-                }
-            }
-            if (type.equals("TCP")) {
-
-            }
-        } catch (Exception e) {
-            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
-
-    }
-    @PostMapping("description")
-    public Response getDesc(@RequestParam(value = "action", defaultValue = "getList") String action,
-                            @RequestParam(value = "name", defaultValue = "") String name,
-                            @RequestParam(value = "text", defaultValue = "") String text){
-        if (action.equals("getList")){
-            return Response.ok().entity(description.getFiles()).build(); // возвращаем список описаний
-        }
-        if (action.equals("get")&& !name.equals("")){ //получаем список значений из файла
-            ArrayList<Desc_Entity> list = description.getDesc(name);
-            return Response.ok().entity(description.getDesc(name)).build();
-        }
-        if (action.equals("raw") && description.getFiles().contains(name)){
-            return Response.ok().entity(description.getRaw(name)).build();
-        }
-        if (action.equals("delete") && description.getFiles().contains(name)){ //удаляем файл
-            return Response.ok().entity(description.delete(name)).build();
-        }
-        if (action.equals("create") && !description.getFiles().contains(name)){ //создаем пустой файл
-            return Response.ok().entity(description.createEmptyFile(name)).build();
-        }
-       // System.out.println(action+" "+name+" "+text);
-        if (action.equals("edit") && description.getFiles().contains(name) && !text.equals("")){
-            return Response.ok().entity(description.edit(name,text)).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
-    }
-    @PostMapping("/addDesc")
-    public Response addDesc(@RequestParam("file") MultipartFile multipartFile,
-                            @RequestParam(value = "name", defaultValue = "") String name ) throws IOException {
-        if (!description.getFiles().contains(name) && !name.equals("")){
-            description.add(multipartFile.getBytes(),name);
-            return  Response.ok().entity(description.getFiles()).build();
-        }
-        return Response.status(Response.Status.NOT_ACCEPTABLE).build();
-    }
-    @PostMapping(value = "/sketch")
-    public Response sketch(@RequestParam(value = "name",defaultValue = "")String name,
-                           @RequestParam(value = "action",defaultValue = "")String action,
-                           @RequestParam(value = "port",defaultValue = "")String port)  {
-        if (action.equals("list")){
-            return Response.ok().entity(sketch.getFiles()).build();
-        }
-        if (action.equals("inProgress")) //возвращаем грузим мы или нет
-            return Response.ok().entity(sketch.isUploading()).build();
-        if (action.equals("logs")){
-            return Response.ok().entity(sketch.getLogs()).build();
-        }
-        if (action.equals("upload")&& sketch.getFiles().contains(name)&&!port.equals("")){
-             sketch.upload(name,port);
-        }
-
-        return Response.noContent().build();
-    }
-    @PostMapping("/process")
-    public Response process(@RequestParam(value = "action") String action,
-                            @RequestParam(value = "name",defaultValue = "") String name){
-        if (action.equals("get")){
-            return Response.ok().entity(pb.getLog()).build();
-        };
-        if (action.equals("cancel")){
-            pb.cancel();
-            return Response.ok().build();
-        };
-//        if (action.equals("load") && !name.equals("")){
-//            try{
-//                pb.startCommand();
-//                return Response.ok().build();
-//            } catch (Exception e){
-//                e.printStackTrace();
-//                return Response.noContent().build();
-//            }
-//
-//        }
-        return  Response.noContent().build();
-    }
 }
